@@ -1,1 +1,6 @@
+com/iae/dao/DatabaseManager.class
+com/iae/model/ProcessResult.class
+com/iae/model/Project.class
+com/iae/model/StudentResult.class
 com/iae/MainApp.class
+com/iae/model/Configuration.class
