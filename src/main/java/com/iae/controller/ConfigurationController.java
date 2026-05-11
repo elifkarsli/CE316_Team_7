@@ -176,6 +176,28 @@ public class ConfigurationController {
         }
     }
 
+    @FXML
+    private void handleHelp() {
+        URL helpViewUrl = getClass().getResource("/fxml/help.fxml");
+        if (helpViewUrl == null) {
+            showError("Help screen could not be found.");
+            return;
+        }
+
+        try {
+            Parent root = FXMLLoader.load(helpViewUrl);
+
+            Stage dialog = new Stage();
+            dialog.setTitle("IAE Help");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.initOwner(getWindow());
+            dialog.setScene(new Scene(root));
+            dialog.show();
+        } catch (IOException exception) {
+            showError("Help screen could not be opened.", exception);
+        }
+    }
+
     private void refreshConfigurations() {
         try {
             configurations.setAll(configurationService.listConfigurations());

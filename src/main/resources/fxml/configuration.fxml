@@ -32,6 +32,8 @@
                 <Separator orientation="VERTICAL"/>
                 <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImport" text="Import"/>
                 <Button fx:id="exportButton" mnemonicParsing="false" onAction="#handleExport" text="Export"/>
+                <Separator orientation="VERTICAL"/>
+                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#handleHelp" text="Help"/>
             </ToolBar>
         </VBox>
     </top>
