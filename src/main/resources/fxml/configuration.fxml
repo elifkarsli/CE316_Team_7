@@ -39,7 +39,7 @@
     </top>
 
     <center>
-        <TableView fx:id="configurationTable" columnResizePolicy="CONSTRAINED_RESIZE_POLICY" BorderPane.alignment="CENTER">
+        <TableView fx:id="configurationTable" BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets bottom="16.0" left="16.0" right="16.0" top="8.0"/>
             </BorderPane.margin>

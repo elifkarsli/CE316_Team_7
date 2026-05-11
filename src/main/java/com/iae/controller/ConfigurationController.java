@@ -76,6 +76,7 @@ public class ConfigurationController {
         typeColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().isInterpreted() ? "Interpreted" : "Compiled"));
 
+        configurationTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         configurationTable.setItems(configurations);
 
         editButton.disableProperty().bind(Bindings.isNull(configurationTable.getSelectionModel().selectedItemProperty()));
