@@ -194,15 +194,20 @@ public class ConfigurationController {
         try {
             FXMLLoader loader = new FXMLLoader(editViewUrl);
             Parent root = loader.load();
+            ConfigEditController controller = loader.getController();
+            controller.setConfiguration(configuration);
 
             Stage dialog = new Stage();
             dialog.setTitle(configuration == null ? "New Configuration" : "Edit Configuration");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(getWindow());
             dialog.setScene(new Scene(root));
+            controller.setDialogStage(dialog);
             dialog.showAndWait();
 
-            refreshConfigurations();
+            if (controller.isSaved()) {
+                refreshConfigurations();
+            }
         } catch (IOException exception) {
             showError("Configuration edit form could not be opened.", exception);
         }
