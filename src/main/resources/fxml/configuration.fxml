@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600.0" prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/17.0.6"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.iae.controller.ConfigurationController">
+    <top>
+        <VBox spacing="12.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="8.0" left="16.0" right="16.0" top="16.0"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="12.0">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Configurations"/>
+            </HBox>
+
+            <ToolBar>
+                <Button fx:id="newButton" mnemonicParsing="false" onAction="#handleNew" text="New"/>
+                <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEdit" text="Edit"/>
+                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" text="Delete"/>
+                <Separator orientation="VERTICAL"/>
+                <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImport" text="Import"/>
+                <Button fx:id="exportButton" mnemonicParsing="false" onAction="#handleExport" text="Export"/>
+            </ToolBar>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="configurationTable" columnResizePolicy="CONSTRAINED_RESIZE_POLICY" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets bottom="16.0" left="16.0" right="16.0" top="8.0"/>
+            </BorderPane.margin>
+            <columns>
+                <TableColumn fx:id="idColumn" maxWidth="70.0" minWidth="55.0" prefWidth="60.0" text="ID"/>
+                <TableColumn fx:id="nameColumn" minWidth="140.0" prefWidth="180.0" text="Name"/>
+                <TableColumn fx:id="sourceFileColumn" minWidth="130.0" prefWidth="160.0" text="Source File"/>
+                <TableColumn fx:id="compileCommandColumn" minWidth="170.0" prefWidth="220.0" text="Compile Command"/>
+                <TableColumn fx:id="runCommandColumn" minWidth="170.0" prefWidth="220.0" text="Run Command"/>
+                <TableColumn fx:id="typeColumn" maxWidth="130.0" minWidth="100.0" prefWidth="115.0" text="Type"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>
