@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="520.0" prefWidth="620.0" spacing="16.0"
+      xmlns="http://javafx.com/javafx/17.0.6"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.iae.controller.ConfigEditController">
+    <padding>
+        <Insets bottom="18.0" left="18.0" right="18.0" top="18.0"/>
+    </padding>
+
+    <Label fx:id="titleLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Configuration"/>
+
+    <GridPane hgap="12.0" vgap="12.0" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="130.0" prefWidth="150.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="260.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="32.0"/>
+            <RowConstraints minHeight="32.0"/>
+            <RowConstraints minHeight="32.0"/>
+            <RowConstraints minHeight="32.0"/>
+            <RowConstraints minHeight="32.0"/>
+            <RowConstraints minHeight="32.0"/>
+            <RowConstraints minHeight="72.0" vgrow="ALWAYS"/>
+            <RowConstraints minHeight="32.0"/>
+        </rowConstraints>
+
+        <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="nameField" promptText="Java 17" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Source file" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="sourceFileField" promptText="Main.java" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Output file" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="outputFileField" promptText="Main.class" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Compile command" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="compileCommandField" promptText="javac Main.java" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+        <Label text="Run command" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <TextField fx:id="runCommandField" promptText="java Main" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+        <Label text="Arguments" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <TextField fx:id="argumentsField" promptText="Optional runtime arguments" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+        <Label text="Expected output path" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+        <TextArea fx:id="expectedOutputPathField" prefRowCount="3" promptText="Optional path to expected output"
+                  wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+        <CheckBox fx:id="interpretedCheckBox" mnemonicParsing="false" text="Interpreted language"
+                  GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+    </GridPane>
+
+    <Label fx:id="messageLabel" managed="false" style="-fx-text-fill: #b00020;" visible="false" wrapText="true"/>
+
+    <HBox alignment="CENTER_RIGHT" spacing="10.0">
+        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel"/>
+        <Button fx:id="saveButton" defaultButton="true" mnemonicParsing="false" onAction="#handleSave" text="Save"/>
+    </HBox>
+</VBox>

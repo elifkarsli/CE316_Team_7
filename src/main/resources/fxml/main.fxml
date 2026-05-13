@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.6"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.iae.controller.MainController">
+
+    <top>
+        <MenuBar styleClass="menu-bar">
+            <Menu text="File">
+                <MenuItem text="New Project..."      onAction="#handleNewProject"/>
+                <MenuItem text="Open Project..."     onAction="#handleOpenProject"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Exit"                onAction="#handleExit"/>
+            </Menu>
+            <Menu text="Configurations">
+                <MenuItem text="Manage Configurations..." onAction="#handleManageConfigs"/>
+            </Menu>
+            <Menu text="Help">
+                <MenuItem text="User Manual" onAction="#handleHelp"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <left>
+        <VBox style="-fx-padding:10; -fx-min-width:200; -fx-background-color:#F0F4F8; -fx-spacing:8;">
+            <Label text="Projects" style="-fx-font-weight:bold; -fx-font-size:14;"/>
+            <ListView fx:id="projectListView" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-padding:20;">
+            <Label fx:id="welcomeLabel"
+                   text="Welcome! Create or open a project to begin."
+                   style="-fx-font-size:16; -fx-text-fill:#888888;"/>
+        </StackPane>
+    </center>
+
+    <bottom>
+        <Label fx:id="statusBar" text="Ready"
+               style="-fx-padding:4 10; -fx-background-color:#E8E8E8; -fx-font-size:12px; -fx-text-fill:#555555;"/>
+    </bottom>
+
+</BorderPane>

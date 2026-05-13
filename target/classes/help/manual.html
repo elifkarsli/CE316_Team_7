@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IAE User Manual</title>
+    <style>
+        body {
+            color: #1f2933;
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.55;
+            margin: 0;
+            padding: 28px;
+        }
+
+        main {
+            margin: 0 auto;
+            max-width: 900px;
+        }
+
+        h1 {
+            border-bottom: 2px solid #d9e2ec;
+            font-size: 30px;
+            margin: 0 0 20px;
+            padding-bottom: 12px;
+        }
+
+        h2 {
+            color: #102a43;
+            font-size: 21px;
+            margin-top: 28px;
+        }
+
+        h3 {
+            font-size: 17px;
+            margin-top: 18px;
+        }
+
+        code {
+            background: #f0f4f8;
+            border-radius: 4px;
+            color: #102a43;
+            font-family: Consolas, Monaco, monospace;
+            padding: 2px 5px;
+        }
+
+        pre {
+            background: #f0f4f8;
+            border-left: 4px solid #486581;
+            overflow-x: auto;
+            padding: 14px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 12px;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #d9e2ec;
+            padding: 9px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #f0f4f8;
+        }
+
+        .note {
+            background: #f8fafc;
+            border-left: 4px solid #627d98;
+            margin: 16px 0;
+            padding: 12px 14px;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>IAE User Manual</h1>
+
+    <section>
+        <h2>What Is IAE?</h2>
+        <p>
+            IAE is an automated programming assignment evaluation application. It helps instructors or evaluators
+            run submitted source files with predefined language configurations, compare outputs, and read evaluation
+            results in a consistent way.
+        </p>
+        <p>
+            A configuration describes how a specific programming language or execution environment should be handled.
+            For example, a Java configuration can include a compile command such as <code>javac Main.java</code> and
+            a run command such as <code>java Main</code>.
+        </p>
+    </section>
+
+    <section>
+        <h2>Creating A Configuration</h2>
+        <ol>
+            <li>Open the configuration management screen.</li>
+            <li>Select <strong>New</strong>.</li>
+            <li>Enter a clear name, such as <code>Java 17</code> or <code>Python 3</code>.</li>
+            <li>Enter the source file name expected from submissions.</li>
+            <li>Enter the compile command if the language must be compiled.</li>
+            <li>Enter the run command used to execute the program.</li>
+            <li>Enable <strong>Interpreted language</strong> for languages that do not need a compile command.</li>
+            <li>Select <strong>Save</strong>.</li>
+        </ol>
+
+        <h3>Configuration Fields</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Field</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Name</td>
+                <td>The display name of the configuration.</td>
+            </tr>
+            <tr>
+                <td>Source file</td>
+                <td>The source file expected in a submission, such as <code>Main.java</code> or <code>main.py</code>.</td>
+            </tr>
+            <tr>
+                <td>Output file</td>
+                <td>An optional generated output file name, if the execution process creates one.</td>
+            </tr>
+            <tr>
+                <td>Compile command</td>
+                <td>The command used before running the program. This is required for compiled languages.</td>
+            </tr>
+            <tr>
+                <td>Run command</td>
+                <td>The command used to execute the submitted program.</td>
+            </tr>
+            <tr>
+                <td>Arguments</td>
+                <td>Optional command-line arguments used during execution.</td>
+            </tr>
+            <tr>
+                <td>Expected output path</td>
+                <td>Optional path to the expected output used for comparison.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            The application stores configurations in <code>data/configurations.json</code>.
+        </div>
+    </section>
+
+    <section>
+        <h2>Running The Project</h2>
+        <p>
+            The project is a JavaFX application managed with Maven. From the project root, use:
+        </p>
+        <pre><code>mvn javafx:run</code></pre>
+        <p>
+            To compile the project and run tests, use:
+        </p>
+        <pre><code>mvn test</code></pre>
+        <p>
+            Make sure Java 17 or a compatible JDK is installed before running the project.
+        </p>
+    </section>
+
+    <section>
+        <h2>Reading Results</h2>
+        <p>
+            Evaluation results should be read by checking whether each submission compiled, ran successfully, and
+            produced the expected output. A successful result means the configured commands completed correctly and
+            the produced output matched the expected output.
+        </p>
+        <table>
+            <thead>
+            <tr>
+                <th>Status</th>
+                <th>Meaning</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Compile error</td>
+                <td>The compile command failed or required files were missing.</td>
+            </tr>
+            <tr>
+                <td>Runtime error</td>
+                <td>The program started but failed while running.</td>
+            </tr>
+            <tr>
+                <td>Wrong output</td>
+                <td>The program ran, but the output did not match the expected result.</td>
+            </tr>
+            <tr>
+                <td>Accepted</td>
+                <td>The program ran successfully and matched the expected output.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>JSON Import And Export</h2>
+        <h3>Export</h3>
+        <ol>
+            <li>Select a configuration from the table.</li>
+            <li>Select <strong>Export</strong>.</li>
+            <li>Choose where to save the JSON file.</li>
+        </ol>
+
+        <h3>Import</h3>
+        <ol>
+            <li>Select <strong>Import</strong>.</li>
+            <li>Choose a JSON file containing one configuration or a list of configurations.</li>
+            <li>The imported configurations are added with new IDs.</li>
+        </ol>
+
+        <p>Example JSON:</p>
+        <pre><code>{
+  "name": "Python 3",
+  "compileCommand": null,
+  "runCommand": "python3 main.py",
+  "sourceFileName": "main.py",
+  "outputFileName": null,
+  "interpreted": true,
+  "arguments": null,
+  "expectedOutputPath": "expected/output.txt"
+}</code></pre>
+    </section>
+</main>
+</body>
+</html>

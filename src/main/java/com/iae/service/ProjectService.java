@@ -8,7 +8,9 @@ import com.iae.model.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ProjectService {
@@ -18,6 +20,7 @@ public class ProjectService {
     private ZipHandler zipHandler = new ZipHandler();
     private ExecutionEngine executionEngine = new ExecutionEngine();
     private OutputComparator outputComparator = new OutputComparator();
+    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Project createProject(String name, int configId, Path submissionsDir) throws Exception {
         Project p = new Project();
@@ -84,4 +87,10 @@ public class ProjectService {
         project.setLastRunDate(LocalDate.now().toString());
         projectDAO.update(project);
     }
+    public List<StudentResult> getResults(int projectId) throws SQLException {
+        // TODO (Tina): Replace with:
+        //   return new ReportService().getResultsByProject(projectId);
+        return new StudentResultDAO().findByProjectId(projectId);
+    }
+
 }

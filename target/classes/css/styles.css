@@ -1,0 +1,185 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-background-color: #FFFFFF;
+}
+
+
+.label {
+    -fx-text-fill: #1F3864;
+}
+
+.button {
+    -fx-background-color: #2E75B6;
+    -fx-text-fill: white;
+    -fx-padding: 6 14;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #1F5C99;
+}
+
+.button:pressed {
+    -fx-background-color: #174A80;
+}
+
+.button:disabled {
+    -fx-opacity: 0.5;
+}
+
+.text-field,
+.text-area {
+    -fx-border-color: #CCCCCC;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-padding: 4 8;
+}
+
+.text-field:focused,
+.text-area:focused {
+    -fx-border-color: #2E75B6;
+}
+
+
+.combo-box {
+    -fx-border-color: #CCCCCC;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.combo-box:focused {
+    -fx-border-color: #2E75B6;
+}
+
+
+.table-view {
+    -fx-border-color: #CCCCCC;
+    -fx-background-color: #FFFFFF;
+}
+
+.table-view .column-header {
+    -fx-background-color: #1F3864;
+    -fx-padding: 6 10;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #D6E4F7;
+}
+
+.table-view .table-row-cell:selected .text {
+    -fx-fill: #1F3864;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #F7F9FC;
+}
+
+.table-view .table-row-cell:even {
+    -fx-background-color: #FFFFFF;
+}
+
+.list-view {
+    -fx-border-color: #CCCCCC;
+    -fx-background-color: #F0F4F8;
+}
+
+.list-view .list-cell {
+    -fx-padding: 6 10;
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: #D6E4F7;
+    -fx-text-fill: #1F3864;
+}
+
+.menu-bar {
+    -fx-background-color: #1F3864;
+    -fx-padding: 2 0;
+}
+
+.menu-bar .menu .label {
+    -fx-text-fill: white;
+}
+
+.menu-bar .menu:hover,
+.menu-bar .menu:focused,
+.menu-bar .menu:showing {
+    -fx-background-color: #2E75B6;
+}
+
+.context-menu {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);
+}
+
+.context-menu .menu-item {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 5 16;
+}
+
+.context-menu .menu-item .label {
+    -fx-text-fill: #222222;
+}
+
+.context-menu .menu-item:focused,
+.context-menu .menu-item:hover {
+    -fx-background-color: #E8F0FB;
+}
+
+.context-menu .menu-item:focused .label,
+.context-menu .menu-item:hover .label {
+    -fx-text-fill: #1F3864;
+}
+
+.context-menu .separator {
+    -fx-padding: 2 0;
+}
+
+
+.tool-bar {
+    -fx-background-color: #EAF0FB;
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 4 8;
+    -fx-spacing: 6;
+}
+
+
+#statusBar {
+    -fx-background-color: #E8E8E8;
+    -fx-padding: 4 10;
+    -fx-font-size: 12px;
+    -fx-text-fill: #555555;
+}
+
+
+.separator .line {
+    -fx-border-color: #CCCCCC;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.check-box .text {
+    -fx-text-fill: #1F3864;
+}
+
+.web-view {
+    -fx-background-color: white;
+}

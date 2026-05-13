@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.6"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.iae.controller.ProjectSetupController"
+      spacing="16">
+
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <Label text="Create New Project"
+           style="-fx-font-size:22; -fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Project Name:" minWidth="160"/>
+        <TextField fx:id="nameField" prefWidth="320"
+                   promptText="e.g. Assignment 1 – C Programs"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Configuration:" minWidth="160"/>
+        <ComboBox fx:id="configCombo" prefWidth="320"
+                  promptText="Select a configuration…"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Submissions Folder:" minWidth="160"/>
+        <TextField fx:id="dirField" prefWidth="260"
+                   promptText="Path to student ZIP files…"
+                   editable="false"/>
+        <Button text="Browse…" onAction="#handleBrowse"/>
+    </HBox>
+
+    <Label fx:id="messageLabel"
+           managed="false"
+           visible="false"
+           wrapText="true"
+           style="-fx-text-fill:#b00020; -fx-font-size:12px;"/>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Button text="Create Project"
+                onAction="#handleCreate"
+                style="-fx-background-color:#1F3864; -fx-text-fill:white;
+                       -fx-font-size:14; -fx-padding:8 20;
+                       -fx-background-radius:4;"/>
+        <Button text="Cancel" onAction="#handleCancel"/>
+    </HBox>
+
+</VBox>

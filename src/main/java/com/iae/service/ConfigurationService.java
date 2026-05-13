@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import com.iae.dao.ConfigurationDAO;
+import com.iae.dao.ProjectDAO;
 import com.iae.model.Configuration;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -21,10 +24,10 @@ import java.util.Optional;
 public class ConfigurationService {
     private static final Type CONFIGURATION_LIST_TYPE = new TypeToken<List<Configuration>>() {
     }.getType();
-
+    private final ProjectDAO       projectDAO = new ProjectDAO();
+    private final ConfigurationDAO configDAO  = new ConfigurationDAO();
     private final Path storageFile;
     private final Gson gson;
-
     public ConfigurationService() {
         this(Path.of("data", "configurations.json"));
     }
@@ -44,6 +47,9 @@ public class ConfigurationService {
         return readConfigurations().stream()
                 .filter(configuration -> configuration.getId() == id)
                 .findFirst();
+    }
+    public Configuration getById(int id) throws SQLException {
+        return configDAO.findById(id);
     }
 
     public Configuration saveConfiguration(Configuration configuration) throws IOException {
