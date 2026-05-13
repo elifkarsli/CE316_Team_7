@@ -7,14 +7,15 @@ public class Configuration {
     private String runCommand;
     private String sourceFileName;
     private String outputFileName;
-    private boolean isInterpreted;
+    private boolean interpreted;
     private String arguments;
     private String expectedOutputPath;
 
-    public Configuration() {}
+    public Configuration() {
+    }
 
     public Configuration(int id, String name, String compileCommand, String runCommand,
-                         String sourceFileName, String outputFileName, boolean isInterpreted,
+                         String sourceFileName, String outputFileName, boolean interpreted,
                          String arguments, String expectedOutputPath) {
         this.id = id;
         this.name = name;
@@ -22,38 +23,85 @@ public class Configuration {
         this.runCommand = runCommand;
         this.sourceFileName = sourceFileName;
         this.outputFileName = outputFileName;
-        this.isInterpreted = isInterpreted;
+        this.interpreted = interpreted;
         this.arguments = arguments;
         this.expectedOutputPath = expectedOutputPath;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getCompileCommand() { return compileCommand; }
-    public void setCompileCommand(String compileCommand) { this.compileCommand = compileCommand; }
+    public String getName() {
+        return name;
+    }
 
-    public String getRunCommand() { return runCommand; }
-    public void setRunCommand(String runCommand) { this.runCommand = runCommand; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getSourceFileName() { return sourceFileName; }
-    public void setSourceFileName(String sourceFileName) { this.sourceFileName = sourceFileName; }
+    public String getCompileCommand() {
+        return compileCommand;
+    }
 
-    public String getOutputFileName() { return outputFileName; }
-    public void setOutputFileName(String outputFileName) { this.outputFileName = outputFileName; }
+    public void setCompileCommand(String compileCommand) {
+        this.compileCommand = compileCommand;
+    }
 
-    public boolean isInterpreted() { return isInterpreted; }
-    public void setInterpreted(boolean interpreted) { isInterpreted = interpreted; }
+    public String getRunCommand() {
+        return runCommand;
+    }
 
-    public String getArguments() { return arguments; }
-    public void setArguments(String arguments) { this.arguments = arguments; }
+    public void setRunCommand(String runCommand) {
+        this.runCommand = runCommand;
+    }
 
-    public String getExpectedOutputPath() { return expectedOutputPath; }
-    public void setExpectedOutputPath(String expectedOutputPath) { this.expectedOutputPath = expectedOutputPath; }
+    public String getSourceFileName() {
+        return sourceFileName;
+    }
+
+    public void setSourceFileName(String sourceFileName) {
+        this.sourceFileName = sourceFileName;
+    }
+
+    public String getOutputFileName() {
+        return outputFileName;
+    }
+
+    public void setOutputFileName(String outputFileName) {
+        this.outputFileName = outputFileName;
+    }
+
+    public boolean isInterpreted() {
+        return interpreted;
+    }
+
+    public void setInterpreted(boolean interpreted) {
+        this.interpreted = interpreted;
+    }
+
+    public String getArguments() {
+        return arguments;
+    }
+
+    public void setArguments(String arguments) {
+        this.arguments = arguments;
+    }
+
+    public String getExpectedOutputPath() {
+        return expectedOutputPath;
+    }
+
+    public void setExpectedOutputPath(String expectedOutputPath) {
+        this.expectedOutputPath = expectedOutputPath;
+    }
 
     @Override
-    public String toString() { return name; }
+    public String toString() {
+        return name;
+    }
 }
