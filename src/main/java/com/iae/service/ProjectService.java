@@ -34,7 +34,9 @@ public class ProjectService {
 
     public Project openProject(Path dbFile) throws Exception {
         DatabaseManager.getInstance().connect(dbFile.toString());
-        return projectDAO.findAll().get(0);
+        List<Project> projects = projectDAO.findAll();
+        if (projects.isEmpty()) throw new Exception("No project found in this file.");
+        return projects.get(0);
     }
 
     public void runProject(Project project) throws Exception {
