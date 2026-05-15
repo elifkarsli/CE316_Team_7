@@ -1,8 +1,8 @@
 package com.iae.service;
-
+//now this class uses ConfigurationService JSON
 import com.iae.dao.DatabaseManager;
 import com.iae.dao.ProjectDAO;
-import com.iae.dao.ConfigurationDAO;
+//import com.iae.dao.ConfigurationDAO;
 import com.iae.dao.StudentResultDAO;
 import com.iae.model.*;
 
@@ -10,17 +10,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+//import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ProjectService {
     private ProjectDAO projectDAO = new ProjectDAO();
-    private ConfigurationDAO configDAO = new ConfigurationDAO();
+    //private ConfigurationDAO configDAO = new ConfigurationDAO();
+    private ConfigurationService configService = new ConfigurationService();
     private StudentResultDAO resultDAO = new StudentResultDAO();
     private ZipHandler zipHandler = new ZipHandler();
     private ExecutionEngine executionEngine = new ExecutionEngine();
     private OutputComparator outputComparator = new OutputComparator();
-    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    //private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Project createProject(String name, int configId, Path submissionsDir) throws Exception {
         Project p = new Project();
@@ -40,7 +41,10 @@ public class ProjectService {
     }
 
     public void runProject(Project project) throws Exception {
-        Configuration config = configDAO.findById(project.getConfigurationId());
+        /*Configuration config = configDAO.findById(project.getConfigurationId());
+        resultDAO.deleteByProjectId(project.getId());*/
+        Configuration config = configService.findById(project.getConfigurationId())
+                .orElseThrow(() -> new Exception("Configuration not found: " + project.getConfigurationId()));
         resultDAO.deleteByProjectId(project.getId());
 
         List<Path> studentDirs = zipHandler.extractAll(
@@ -90,9 +94,7 @@ public class ProjectService {
         projectDAO.update(project);
     }
     public List<StudentResult> getResults(int projectId) throws SQLException {
-        // TODO (Tina): Replace with:
-        //   return new ReportService().getResultsByProject(projectId);
-        return new StudentResultDAO().findByProjectId(projectId);
+        return resultDAO.findByProjectId(projectId);
     }
 
 }
