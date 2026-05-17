@@ -3,47 +3,55 @@ package com.iae.controller;
 import com.iae.model.Project;
 import com.iae.model.StudentResult;
 import com.iae.service.ProjectService;
+import com.iae.service.ReportService;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.List;
 
 public class ResultsController {
-
-    // ---- FXML fields (wired from results.fxml) -------------------
-    @FXML private Label                      projectTitleLabel;
-    @FXML private Label                      lastRunLabel;
-    @FXML private Label                      summaryLabel;
-    @FXML private Button                     runButton;
-    @FXML private Button                     viewDetailsButton;
-    @FXML private TableView<StudentResult>   resultTable;
-
+    @FXML private Label projectTitleLabel;
+    @FXML private Label lastRunLabel;
+    @FXML private Label summaryLabel;
+    @FXML private Button runButton;
+    @FXML private Button viewDetailsButton;
+    @FXML private TableView<StudentResult> resultTable;
     @FXML private TableColumn<StudentResult, String> colStudentId;
     @FXML private TableColumn<StudentResult, String> colCompileStatus;
     @FXML private TableColumn<StudentResult, String> colRunStatus;
     @FXML private TableColumn<StudentResult, String> colComparison;
     @FXML private TableColumn<StudentResult, String> colOverall;
+    @FXML private TableColumn<StudentResult, Void> detailCol;
 
-    private Project           project;
-    private MainController    mainController;
+    private Project project;
+    private MainController mainController;
     private final ProjectService projectService = new ProjectService();
+    private final ReportService reportService = new ReportService();
+
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
 
     public void setProject(Project project) {
         this.project = project;
-        projectTitleLabel.setText("Results – " + project.getName());
-        String lastRun = project.getLastRunDate() != null
+        projectTitleLabel.setText("Project: " + project.getName());
+        lastRunLabel.setText(project.getLastRunDate() != null
                 ? "Last run: " + project.getLastRunDate()
-                : "Not yet evaluated";
-        lastRunLabel.setText(lastRun);
+                : "Not yet evaluated");
         loadResults();
     }
 
@@ -51,19 +59,35 @@ public class ResultsController {
     private void initialize() {
         colStudentId.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getStudentId()));
-
         colCompileStatus.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getCompileStatus()));
-
         colRunStatus.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getRunStatus()));
-
         colComparison.setCellValueFactory(
                 data -> new SimpleStringProperty(data.getValue().getComparisonResult()));
-
         colOverall.setCellValueFactory(data -> {
-            String cmp = data.getValue().getComparisonResult();
-            return new SimpleStringProperty("PASS".equals(cmp) ? "✔ PASS" : "✘ FAIL");
+            String comparison = data.getValue().getComparisonResult();
+            return new SimpleStringProperty("PASS".equals(comparison) ? "PASS" : "FAIL");
+        });
+
+        detailCol.setSortable(false);
+        detailCol.setCellFactory(column -> new TableCell<>() {
+            private final Button detailsButton = new Button("Details");
+
+            {
+                detailsButton.setOnAction(event -> {
+                    StudentResult result = getTableView().getItems().get(getIndex());
+                    if (result != null) {
+                        openDetailView(result);
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : detailsButton);
+            }
         });
 
         resultTable.setRowFactory(tv -> new TableRow<>() {
@@ -72,14 +96,17 @@ public class ResultsController {
                 super.updateItem(item, empty);
                 if (item == null || empty) {
                     setStyle("");
-                } else if ("PASS".equals(item.getComparisonResult())) {
-                    setStyle("-fx-background-color: #E8F5E9;");
-                } else if ("COMPILE_ERROR".equals(item.getCompileStatus())) {
-                    setStyle("-fx-background-color: #FFEBEE;");
-                } else if ("RUNTIME_ERROR".equals(item.getRunStatus())) {
-                    setStyle("-fx-background-color: #FFF3E0;");
+                    return;
+                }
+
+                if ("PASS".equals(item.getComparisonResult())) {
+                    setStyle("-fx-background-color: #D4EDDA;");
+                } else if ("COMPILE_ERROR".equals(item.getCompileStatus())
+                        || "RUNTIME_ERROR".equals(item.getRunStatus())
+                        || "FAIL".equals(item.getComparisonResult())) {
+                    setStyle("-fx-background-color: #F8D7DA;");
                 } else {
-                    setStyle("-fx-background-color: #FFF9C4;");
+                    setStyle("");
                 }
             }
         });
@@ -89,10 +116,13 @@ public class ResultsController {
     }
 
     private void loadResults() {
-        if (project == null) return;
+        if (project == null) {
+            return;
+        }
+
         try {
-            List<StudentResult> results = projectService.getResults(project.getId());
-            resultTable.getItems().setAll(results);
+            List<StudentResult> results = reportService.getResultsByProject(project.getId());
+            resultTable.setItems(FXCollections.observableArrayList(results));
             updateSummary(results);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Load Error",
@@ -102,19 +132,19 @@ public class ResultsController {
 
     @FXML
     void handleRun() {
-        if (project == null) return;
+        if (project == null) {
+            return;
+        }
 
         runButton.setDisable(true);
-        runButton.setText("Running…");
-        if (mainController != null) mainController.setStatus("Evaluating submissions…");
+        runButton.setText("Running...");
+        if (mainController != null) {
+            mainController.setStatus("Evaluating submissions...");
+        }
 
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() throws Exception {
-                // TODO Tina: OutputComparator and ReportService are called
-                //  Uncomment the line below
-                // projectService.runProject(project);
-
                 projectService.runProject(project);
                 return null;
             }
@@ -122,49 +152,55 @@ public class ResultsController {
             @Override
             protected void succeeded() {
                 runButton.setDisable(false);
-                runButton.setText("▶  Run Evaluation");
+                runButton.setText("Run Project");
                 loadResults();
                 lastRunLabel.setText("Last run: " + project.getLastRunDate());
-                if (mainController != null)
-                    mainController.setStatus("Evaluation complete – " + project.getName());
+                if (mainController != null) {
+                    mainController.setStatus("Evaluation complete - " + project.getName());
+                }
             }
 
             @Override
             protected void failed() {
                 runButton.setDisable(false);
-                runButton.setText("▶  Run Evaluation");
-                if (mainController != null)
+                runButton.setText("Run Project");
+                if (mainController != null) {
                     mainController.setStatus("Evaluation failed.");
+                }
                 showAlert(Alert.AlertType.ERROR, "Run Error",
                         "Evaluation failed: " + getException().getMessage());
             }
         };
 
-        Thread t = new Thread(task);
-        t.setDaemon(true);
-        t.start();
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @FXML
     void handleViewDetails() {
         StudentResult selected = resultTable.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected != null) {
+            openDetailView(selected);
+        }
+    }
 
+    private void openDetailView(StudentResult selected) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/fxml/result_detail.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/result_detail.fxml"));
             Parent view = loader.load();
 
-            // TODO Tina: ResultDetailController.setStudentResult()
-            // Uncomment once result_detail.fxml and ResultDetailController are ready:
-
-            // ResultDetailController rdc = loader.getController();
-            // rdc.setStudentResult(selected);
+            ResultDetailController controller = loader.getController();
+            controller.setResult(selected);
 
             Stage detailStage = new Stage();
-            detailStage.setTitle("Result Detail – " + selected.getStudentId());
+            detailStage.initModality(Modality.APPLICATION_MODAL);
+            if (resultTable.getScene() != null) {
+                detailStage.initOwner(resultTable.getScene().getWindow());
+            }
+            detailStage.setTitle("Result Detail - " + selected.getStudentId());
             detailStage.setScene(new Scene(view, 700, 550));
-            detailStage.show();
+            detailStage.showAndWait();
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Detail Error",
                     "Could not open detail view: " + e.getMessage());

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.6"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.iae.controller.ResultDetailController"
+      spacing="12"
+      style="-fx-padding:20; -fx-background-color:#F7F9FC;">
+
+    <Label fx:id="studentLabel"
+           text="Student:"
+           style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
+
+    <TextArea fx:id="detailArea"
+              editable="false"
+              wrapText="true"
+              prefRowCount="18"
+              VBox.vgrow="ALWAYS"/>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Close" onAction="#handleClose"/>
+    </HBox>
+</VBox>
