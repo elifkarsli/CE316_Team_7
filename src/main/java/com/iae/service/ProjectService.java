@@ -1,27 +1,21 @@
 package com.iae.service;
-//now this class uses ConfigurationService JSON
 import com.iae.dao.DatabaseManager;
 import com.iae.dao.ProjectDAO;
-//import com.iae.dao.ConfigurationDAO;
-import com.iae.dao.StudentResultDAO;
 import com.iae.model.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
-//import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ProjectService {
     private ProjectDAO projectDAO = new ProjectDAO();
-    //private ConfigurationDAO configDAO = new ConfigurationDAO();
     private ConfigurationService configService = new ConfigurationService();
-    private StudentResultDAO resultDAO = new StudentResultDAO();
+    private ReportService reportService = new ReportService();
     private ZipHandler zipHandler = new ZipHandler();
     private ExecutionEngine executionEngine = new ExecutionEngine();
     private OutputComparator outputComparator = new OutputComparator();
-    //private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Project createProject(String name, int configId, Path submissionsDir) throws Exception {
         Project p = new Project();
@@ -41,11 +35,9 @@ public class ProjectService {
     }
 
     public void runProject(Project project) throws Exception {
-        /*Configuration config = configDAO.findById(project.getConfigurationId());
-        resultDAO.deleteByProjectId(project.getId());*/
         Configuration config = configService.findById(project.getConfigurationId())
                 .orElseThrow(() -> new Exception("Configuration not found: " + project.getConfigurationId()));
-        resultDAO.deleteByProjectId(project.getId());
+        reportService.clearResults(project.getId());
 
         List<Path> studentDirs = zipHandler.extractAll(
                 Paths.get(project.getSubmissionsDirectory()),
@@ -64,7 +56,7 @@ public class ProjectService {
                 result.setCompileStatus(cr.isSuccess() ? "SUCCESS" : "COMPILE_ERROR");
                 result.setCompileLog(cr.getStdout() + cr.getStderr());
                 if (!cr.isSuccess()) {
-                    resultDAO.save(result);
+                    reportService.saveResult(result);
                     continue;
                 }
             } else {
@@ -77,24 +69,27 @@ public class ProjectService {
             result.setRunOutput(rr.getStdout());
             if (!rr.isSuccess()) {
                 result.setErrorDetails(rr.getStderr());
-                resultDAO.save(result);
+                reportService.saveResult(result);
                 continue;
             }
 
-
-            String verdict = outputComparator.compare(
+            Path expectedOutputPath = Paths.get(config.getExpectedOutputPath());
+            OutputComparator.ComparisonResult comparison = outputComparator.compare(
                     rr.getStdout(),
-                    Paths.get(config.getExpectedOutputPath())
-            ).toString();
-            result.setComparisonResult(verdict);
-            resultDAO.save(result);
+                    expectedOutputPath
+            );
+            result.setComparisonResult(comparison.name());
+            if (comparison == OutputComparator.ComparisonResult.FAIL) {
+                result.setErrorDetails(outputComparator.getDiffSummary(rr.getStdout(), expectedOutputPath));
+            }
+            reportService.saveResult(result);
         }
 
         project.setLastRunDate(LocalDate.now().toString());
         projectDAO.update(project);
     }
     public List<StudentResult> getResults(int projectId) throws SQLException {
-        return resultDAO.findByProjectId(projectId);
+        return reportService.getResultsByProject(projectId);
     }
 
 }
