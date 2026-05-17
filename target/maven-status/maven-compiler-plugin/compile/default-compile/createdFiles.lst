@@ -6,7 +6,6 @@ com/iae/controller/HelpController.class
 com/iae/dao/ConfigurationDAO.class
 com/iae/controller/ProjectSetupController.class
 com/iae/service/OutputComparator.class
-com/iae/service/OutputComparator$Verdict.class
 com/iae/controller/ConfigEditController.class
 com/iae/model/StudentResult.class
 com/iae/dao/DatabaseManager.class

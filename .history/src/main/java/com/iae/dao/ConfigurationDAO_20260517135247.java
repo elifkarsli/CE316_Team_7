@@ -1,13 +1,9 @@
 package com.iae.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.iae.model.Configuration;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.iae.model.Configuration;
 
 public class ConfigurationDAO {
     private final DatabaseManager db = DatabaseManager.getInstance();

@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "name": "C Language",
+    "compileCommand": "gcc main.c -o main",
+    "runCommand": "./main",
+    "sourceFileName": "main.c",
+    "outputFileName": "main",
+    "interpreted": false
+  }
+]

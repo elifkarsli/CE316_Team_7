@@ -1,30 +1,26 @@
 package com.iae.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.iae.model.Configuration;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iae.model.Configuration;
-
 public class ConfigurationDAO {
-    private final DatabaseManager db = DatabaseManager.getInstance();
+    private DatabaseManager db = DatabaseManager.getInstance();
 
     public void save(Configuration c) throws SQLException {
         String sql = "INSERT INTO configurations (name,compileCommand,runCommand,sourceFileName,outputFileName,isInterpreted,arguments,expectedOutputPath) VALUES (?,?,?,?,?,?,?,?)";
-        try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
-            ps.setString(1, c.getName());
-            ps.setString(2, c.getCompileCommand());
-            ps.setString(3, c.getRunCommand());
-            ps.setString(4, c.getSourceFileName());
-            ps.setString(5, c.getOutputFileName());
-            ps.setInt(6, c.isInterpreted() ? 1 : 0);
-            ps.setString(7, c.getArguments());
-            ps.setString(8, c.getExpectedOutputPath());
-            ps.executeUpdate();
-        }
+        PreparedStatement ps = db.getConnection().prepareStatement(sql);
+        ps.setString(1, c.getName());
+        ps.setString(2, c.getCompileCommand());
+        ps.setString(3, c.getRunCommand());
+        ps.setString(4, c.getSourceFileName());
+        ps.setString(5, c.getOutputFileName());
+        ps.setInt(6, c.isInterpreted() ? 1 : 0);
+        ps.setString(7, c.getArguments());
+        ps.setString(8, c.getExpectedOutputPath());
+        ps.executeUpdate();
+        ps.close();
         int id = db.getLastInsertRowId();
         if (id != -1) c.setId(id);
     }

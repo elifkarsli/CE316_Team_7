@@ -1,29 +1,26 @@
 package com.iae.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.iae.model.StudentResult;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iae.model.StudentResult;
-
 public class StudentResultDAO {
-    private final DatabaseManager db = DatabaseManager.getInstance();
+    private DatabaseManager db = DatabaseManager.getInstance();
 
     public void save(StudentResult r) throws SQLException {
         String sql = "INSERT INTO student_results (projectId,studentId,compileStatus,compileLog,runStatus,runOutput,comparisonResult,errorDetails) VALUES (?,?,?,?,?,?,?,?)";
-        try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, r.getProjectId());
-            ps.setString(2, r.getStudentId());
-            ps.setString(3, r.getCompileStatus());
-            ps.setString(4, r.getCompileLog());
-            ps.setString(5, r.getRunStatus());
-            ps.setString(6, r.getRunOutput());
-            ps.setString(7, r.getComparisonResult());
-            ps.setString(8, r.getErrorDetails());
-            ps.executeUpdate();
-        }
+        PreparedStatement ps = db.getConnection().prepareStatement(sql);
+        ps.setInt(1, r.getProjectId());
+        ps.setString(2, r.getStudentId());
+        ps.setString(3, r.getCompileStatus());
+        ps.setString(4, r.getCompileLog());
+        ps.setString(5, r.getRunStatus());
+        ps.setString(6, r.getRunOutput());
+        ps.setString(7, r.getComparisonResult());
+        ps.setString(8, r.getErrorDetails());
+        ps.executeUpdate();
+        ps.close();
         int id = db.getLastInsertRowId();
         if (id != -1) r.setId(id);
     }

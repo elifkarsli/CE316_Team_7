@@ -8,7 +8,6 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.iae.controller.ResultsController">
 
-    <!-- Top: project title + action bar -->
     <top>
         <VBox spacing="10" style="-fx-padding:16 16 8 16; -fx-background-color:#F7F9FC;">
             <HBox alignment="CENTER_LEFT" spacing="12">
@@ -22,7 +21,7 @@
 
             <ToolBar>
                 <Button fx:id="runButton"
-                        text="▶  Run Evaluation"
+                        text="Run Project"
                         onAction="#handleRun"
                         style="-fx-background-color:#1F3864; -fx-text-fill:white;
                                -fx-padding:6 16; -fx-background-radius:4;"/>
@@ -37,14 +36,13 @@
         </VBox>
     </top>
 
-    <!-- Center: results table -->
     <center>
         <TableView fx:id="resultTable" BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets top="8" right="16" bottom="16" left="16"/>
             </BorderPane.margin>
             <placeholder>
-                <Label text="No results yet. Click ▶ Run Evaluation to evaluate submissions."
+                <Label text="No results yet. Click Run Project to evaluate submissions."
                        style="-fx-text-fill:#888888;"/>
             </placeholder>
             <columns>
@@ -58,11 +56,14 @@
                              text="Run Status"
                              minWidth="120" prefWidth="140"/>
                 <TableColumn fx:id="colComparison"
-                             text="Comparison"
+                             text="Output Result"
                              minWidth="120" prefWidth="140"/>
                 <TableColumn fx:id="colOverall"
                              text="Overall"
-                             minWidth="90"  prefWidth="100"/>
+                             minWidth="90" prefWidth="100"/>
+                <TableColumn fx:id="detailCol"
+                             text="Details"
+                             minWidth="90" prefWidth="110"/>
             </columns>
         </TableView>
     </center>
