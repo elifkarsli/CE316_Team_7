@@ -5,11 +5,14 @@ import com.iae.service.ProjectService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -23,6 +26,7 @@ public class MainController {
     @FXML private ListView<String> projectListView;
     @FXML private Label        statusBar;
     @FXML private Label        welcomeLabel;
+    @FXML private MenuBar      menuBar;
 
     private final ProjectService projectService = new ProjectService();
 
@@ -38,6 +42,8 @@ public class MainController {
                 }
             }
         });
+
+        Platform.runLater(this::wireExitMenuClick);
     }
 
     @FXML
@@ -113,6 +119,24 @@ public class MainController {
     @FXML
     void handleExit() {
         Platform.exit();
+        Runtime.getRuntime().halt(0);
+    }
+
+    private void wireExitMenuClick() {
+        for (Node menuNode : menuBar.lookupAll(".menu")) {
+            Node labelNode = menuNode.lookup(".label");
+            if (labelNode instanceof Labeled label && "Exit".equals(label.getText())) {
+                menuNode.setOnMouseClicked(event -> {
+                    event.consume();
+                    handleExit();
+                });
+                labelNode.setOnMouseClicked(event -> {
+                    event.consume();
+                    handleExit();
+                });
+                return;
+            }
+        }
     }
 
 

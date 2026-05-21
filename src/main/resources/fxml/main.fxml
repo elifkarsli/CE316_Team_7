@@ -8,18 +8,19 @@
             fx:controller="com.iae.controller.MainController">
 
     <top>
-        <MenuBar styleClass="menu-bar">
+        <MenuBar fx:id="menuBar" styleClass="menu-bar">
             <Menu text="File">
                 <MenuItem text="New Project..."      onAction="#handleNewProject"/>
                 <MenuItem text="Open Project..."     onAction="#handleOpenProject"/>
-                <SeparatorMenuItem/>
-                <MenuItem text="Exit"                onAction="#handleExit"/>
             </Menu>
             <Menu text="Configurations">
                 <MenuItem text="Manage Configurations..." onAction="#handleManageConfigs"/>
             </Menu>
             <Menu text="Help">
                 <MenuItem text="User Manual" onAction="#handleHelp"/>
+            </Menu>
+            <Menu text="Exit" onAction="#handleExit" onShowing="#handleExit">
+                <MenuItem text="Exit" visible="false"/>
             </Menu>
         </MenuBar>
     </top>
