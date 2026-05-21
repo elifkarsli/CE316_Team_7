@@ -18,8 +18,10 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class ConfigurationService {
     private static final Type CONFIGURATION_LIST_TYPE = new TypeToken<List<Configuration>>() {
@@ -114,16 +116,29 @@ public class ConfigurationService {
         List<Configuration> importedConfigurations = readImportedConfigurations(importFile);
         List<Configuration> configurations = readConfigurations();
         List<Configuration> savedConfigurations = new ArrayList<>();
+        Set<String> existingNames = configurationNames(configurations);
+
+        for (Configuration importedConfiguration : importedConfigurations) {
+            validateConfiguration(importedConfiguration);
+        }
 
         int nextId = nextId(configurations);
         for (Configuration importedConfiguration : importedConfigurations) {
-            validateConfiguration(importedConfiguration);
+            String normalizedName = normalizeName(importedConfiguration.getName());
+            if (existingNames.contains(normalizedName)) {
+                continue;
+            }
+
             importedConfiguration.setId(nextId++);
             configurations.add(importedConfiguration);
             savedConfigurations.add(importedConfiguration);
+            existingNames.add(normalizedName);
         }
 
-        writeConfigurations(configurations);
+        if (!savedConfigurations.isEmpty()) {
+            writeConfigurations(configurations);
+        }
+
         return savedConfigurations;
     }
 
@@ -142,17 +157,22 @@ public class ConfigurationService {
 
     private List<Configuration> readImportedConfigurations(Path importFile) throws IOException {
         try (Reader reader = Files.newBufferedReader(importFile)) {
-            Configuration singleConfiguration = gson.fromJson(reader, Configuration.class);
-            if (singleConfiguration != null && singleConfiguration.getName() != null) {
-                return new ArrayList<>(List.of(singleConfiguration));
+            JsonElement importedJson = gson.fromJson(reader, JsonElement.class);
+            if (importedJson == null || importedJson.isJsonNull()) {
+                throw new IOException("Import file does not contain a configuration.");
             }
-        } catch (JsonParseException ignored) {
-            // Try list format below.
-        }
 
-        try (Reader reader = Files.newBufferedReader(importFile)) {
-            List<Configuration> configurations = gson.fromJson(reader, CONFIGURATION_LIST_TYPE);
-            return configurations == null ? new ArrayList<>() : configurations;
+            if (importedJson.isJsonObject()) {
+                Configuration configuration = gson.fromJson(importedJson, Configuration.class);
+                return new ArrayList<>(List.of(configuration));
+            }
+
+            if (importedJson.isJsonArray()) {
+                List<Configuration> configurations = gson.fromJson(importedJson, CONFIGURATION_LIST_TYPE);
+                return configurations == null ? new ArrayList<>() : configurations;
+            }
+
+            throw new IOException("Import file must contain a configuration object or a list of configurations.");
         } catch (JsonParseException exception) {
             throw new IOException("Could not import configuration JSON file.", exception);
         }
@@ -276,6 +296,17 @@ public class ConfigurationService {
                 .orElse(0) + 1;
     }
 
+    private Set<String> configurationNames(List<Configuration> configurations) {
+        Set<String> names = new HashSet<>();
+        for (Configuration configuration : configurations) {
+            String normalizedName = normalizeName(configuration.getName());
+            if (normalizedName != null) {
+                names.add(normalizedName);
+            }
+        }
+        return names;
+    }
+
     private void createParentDirectories(Path file) throws IOException {
         Path parent = file.getParent();
         if (parent != null) {
@@ -285,5 +316,9 @@ public class ConfigurationService {
 
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
+    }
+
+    private String normalizeName(String value) {
+        return value == null ? null : value.trim().toLowerCase();
     }
 }
