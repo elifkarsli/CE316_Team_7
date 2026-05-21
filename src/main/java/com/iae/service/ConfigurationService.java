@@ -2,6 +2,9 @@ package com.iae.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.iae.model.Configuration;
@@ -21,16 +24,24 @@ import java.util.Optional;
 public class ConfigurationService {
     private static final Type CONFIGURATION_LIST_TYPE = new TypeToken<List<Configuration>>() {
     }.getType();
+    private static final String CONFIGURATION_IN_USE_MESSAGE =
+            "This configuration is currently used by a project and cannot be deleted.";
 
     private final Path storageFile;
+    private final Path projectStorageFile;
     private final Gson gson;
 
     public ConfigurationService() {
-        this(Path.of("data", "configurations.json"));
+        this(Path.of("data", "configurations.json"), Path.of("data", "projects.json"));
     }
 
     public ConfigurationService(Path storageFile) {
+        this(storageFile, Path.of("data", "projects.json"));
+    }
+
+    public ConfigurationService(Path storageFile, Path projectStorageFile) {
         this.storageFile = storageFile;
+        this.projectStorageFile = projectStorageFile;
         this.gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
@@ -73,13 +84,20 @@ public class ConfigurationService {
 
     public boolean deleteConfiguration(int id) throws IOException {
         List<Configuration> configurations = readConfigurations();
-        boolean removed = configurations.removeIf(configuration -> configuration.getId() == id);
+        boolean exists = configurations.stream()
+                .anyMatch(configuration -> configuration.getId() == id);
 
-        if (removed) {
-            writeConfigurations(configurations);
+        if (!exists) {
+            return false;
         }
 
-        return removed;
+        if (isConfigurationUsedByProject(id)) {
+            throw new IllegalStateException(CONFIGURATION_IN_USE_MESSAGE);
+        }
+
+        configurations.removeIf(configuration -> configuration.getId() == id);
+        writeConfigurations(configurations);
+        return true;
     }
 
     public void exportConfiguration(int id, Path exportFile) throws IOException {
@@ -137,6 +155,88 @@ public class ConfigurationService {
             return configurations == null ? new ArrayList<>() : configurations;
         } catch (JsonParseException exception) {
             throw new IOException("Could not import configuration JSON file.", exception);
+        }
+    }
+
+    private boolean isConfigurationUsedByProject(int configurationId) throws IOException {
+        if (Files.notExists(projectStorageFile)) {
+            return false;
+        }
+
+        try (Reader reader = Files.newBufferedReader(projectStorageFile)) {
+            JsonElement projectsJson = gson.fromJson(reader, JsonElement.class);
+            return containsConfigurationReference(projectsJson, configurationId);
+        } catch (JsonParseException exception) {
+            throw new IOException("Could not read projects JSON file.", exception);
+        }
+    }
+
+    private boolean containsConfigurationReference(JsonElement element, int configurationId) {
+        if (element == null || element.isJsonNull()) {
+            return false;
+        }
+
+        if (element.isJsonArray()) {
+            JsonArray array = element.getAsJsonArray();
+            for (JsonElement item : array) {
+                if (containsConfigurationReference(item, configurationId)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        if (!element.isJsonObject()) {
+            return false;
+        }
+
+        JsonObject object = element.getAsJsonObject();
+        if (hasMatchingId(object, "configurationId", configurationId)
+                || hasMatchingId(object, "configId", configurationId)
+                || hasMatchingConfigurationObject(object, configurationId)) {
+            return true;
+        }
+
+        for (JsonElement child : object.asMap().values()) {
+            if (containsConfigurationReference(child, configurationId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasMatchingConfigurationObject(JsonObject object, int configurationId) {
+        JsonElement configurationElement = object.get("configuration");
+        if (configurationElement == null || configurationElement.isJsonNull()) {
+            return false;
+        }
+
+        if (isMatchingNumber(configurationElement, configurationId)) {
+            return true;
+        }
+
+        if (!configurationElement.isJsonObject()) {
+            return false;
+        }
+
+        return hasMatchingId(configurationElement.getAsJsonObject(), "id", configurationId);
+    }
+
+    private boolean hasMatchingId(JsonObject object, String memberName, int expectedId) {
+        JsonElement idElement = object.get(memberName);
+        return isMatchingNumber(idElement, expectedId);
+    }
+
+    private boolean isMatchingNumber(JsonElement element, int expectedValue) {
+        if (element == null || !element.isJsonPrimitive() || !element.getAsJsonPrimitive().isNumber()) {
+            return false;
+        }
+
+        try {
+            return element.getAsInt() == expectedValue;
+        } catch (NumberFormatException exception) {
+            return false;
         }
     }
 

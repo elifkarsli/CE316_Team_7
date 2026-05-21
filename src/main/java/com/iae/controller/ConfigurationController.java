@@ -126,6 +126,8 @@ public class ConfigurationController {
             }
         } catch (IOException exception) {
             showError("Configuration could not be deleted.", exception);
+        } catch (IllegalStateException exception) {
+            showError("Configuration cannot be deleted.", exception);
         }
     }
 
