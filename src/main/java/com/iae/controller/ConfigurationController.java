@@ -199,6 +199,14 @@ public class ConfigurationController {
         }
     }
 
+    @FXML
+    private void handleExit() {
+        Window window = getWindow();
+        if (window != null) {
+            window.hide();
+        }
+    }
+
     private void refreshConfigurations() {
         try {
             configurations.setAll(configurationService.listConfigurations());

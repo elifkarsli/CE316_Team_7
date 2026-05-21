@@ -14,7 +14,7 @@
 
         main {
             margin: 0 auto;
-            max-width: 900px;
+            max-width: 920px;
         }
 
         h1 {
@@ -27,10 +27,11 @@
         h2 {
             color: #102a43;
             font-size: 21px;
-            margin-top: 28px;
+            margin-top: 30px;
         }
 
         h3 {
+            color: #243b53;
             font-size: 17px;
             margin-top: 18px;
         }
@@ -83,27 +84,34 @@
     <section>
         <h2>What Is IAE?</h2>
         <p>
-            IAE is an automated programming assignment evaluation application. It helps instructors or evaluators
-            run submitted source files with predefined language configurations, compare outputs, and read evaluation
-            results in a consistent way.
+            IAE is an automated programming assignment evaluation application. It helps instructors and evaluators
+            run student submissions with predefined language configurations, compare produced output with expected
+            output, and review results in a consistent way.
         </p>
         <p>
-            A configuration describes how a specific programming language or execution environment should be handled.
-            For example, a Java configuration can include a compile command such as <code>javac Main.java</code> and
-            a run command such as <code>java Main</code>.
+            The usual workflow is: create a configuration, create or open a project, run the project, then read the
+            results. Configurations define how programs are compiled and executed. Projects define what will be
+            evaluated.
         </p>
     </section>
 
     <section>
         <h2>Creating A Configuration</h2>
+        <p>
+            A configuration describes how a specific programming language or execution environment should be handled.
+            For example, a Java configuration can use <code>javac Main.java</code> as the compile command and
+            <code>java Main</code> as the run command. A Python configuration can be marked as interpreted and use
+            <code>python3 main.py</code> as the run command.
+        </p>
+
         <ol>
-            <li>Open the configuration management screen.</li>
+            <li>Open the <strong>Configurations</strong> screen.</li>
             <li>Select <strong>New</strong>.</li>
             <li>Enter a clear name, such as <code>Java 17</code> or <code>Python 3</code>.</li>
             <li>Enter the source file name expected from submissions.</li>
-            <li>Enter the compile command if the language must be compiled.</li>
+            <li>Enter the compile command if the language must be compiled before execution.</li>
             <li>Enter the run command used to execute the program.</li>
-            <li>Enable <strong>Interpreted language</strong> for languages that do not need a compile command.</li>
+            <li>Enable <strong>Interpreted language</strong> when the language does not need a compile command.</li>
             <li>Select <strong>Save</strong>.</li>
         </ol>
 
@@ -118,7 +126,7 @@
             <tbody>
             <tr>
                 <td>Name</td>
-                <td>The display name of the configuration.</td>
+                <td>The display name shown in the configuration list and project setup screens.</td>
             </tr>
             <tr>
                 <td>Source file</td>
@@ -126,96 +134,59 @@
             </tr>
             <tr>
                 <td>Output file</td>
-                <td>An optional generated output file name, if the execution process creates one.</td>
+                <td>Optional output file name if the submitted program writes its result to a file.</td>
             </tr>
             <tr>
                 <td>Compile command</td>
-                <td>The command used before running the program. This is required for compiled languages.</td>
+                <td>The command used before running the program. It is required for compiled languages.</td>
             </tr>
             <tr>
                 <td>Run command</td>
-                <td>The command used to execute the submitted program.</td>
+                <td>The command used to execute the submitted program after compilation, or directly for interpreted languages.</td>
             </tr>
             <tr>
                 <td>Arguments</td>
-                <td>Optional command-line arguments used during execution.</td>
+                <td>Optional command-line arguments passed while running the program.</td>
             </tr>
             <tr>
                 <td>Expected output path</td>
-                <td>Optional path to the expected output used for comparison.</td>
+                <td>Optional path to the expected output used when comparing the program result.</td>
+            </tr>
+            <tr>
+                <td>Interpreted language</td>
+                <td>When selected, the compile command is not required.</td>
             </tr>
             </tbody>
         </table>
 
         <div class="note">
-            The application stores configurations in <code>data/configurations.json</code>.
+            Required fields are <strong>Name</strong>, <strong>Source file</strong>, and <strong>Run command</strong>.
+            <strong>Compile command</strong> is also required unless <strong>Interpreted language</strong> is selected.
         </div>
     </section>
 
     <section>
-        <h2>Running The Project</h2>
-        <p>
-            The project is a JavaFX application managed with Maven. From the project root, use:
-        </p>
-        <pre><code>mvn javafx:run</code></pre>
-        <p>
-            To compile the project and run tests, use:
-        </p>
-        <pre><code>mvn test</code></pre>
-        <p>
-            Make sure Java 17 or a compatible JDK is installed before running the project.
-        </p>
-    </section>
-
-    <section>
-        <h2>Reading Results</h2>
-        <p>
-            Evaluation results should be read by checking whether each submission compiled, ran successfully, and
-            produced the expected output. A successful result means the configured commands completed correctly and
-            the produced output matched the expected output.
-        </p>
-        <table>
-            <thead>
-            <tr>
-                <th>Status</th>
-                <th>Meaning</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Compile error</td>
-                <td>The compile command failed or required files were missing.</td>
-            </tr>
-            <tr>
-                <td>Runtime error</td>
-                <td>The program started but failed while running.</td>
-            </tr>
-            <tr>
-                <td>Wrong output</td>
-                <td>The program ran, but the output did not match the expected result.</td>
-            </tr>
-            <tr>
-                <td>Accepted</td>
-                <td>The program ran successfully and matched the expected output.</td>
-            </tr>
-            </tbody>
-        </table>
-    </section>
-
-    <section>
         <h2>JSON Import And Export</h2>
-        <h3>Export</h3>
+        <p>
+            JSON import and export are used to share configurations or move them between computers. Export creates a
+            JSON file from a selected configuration. Import reads a JSON file and adds the configuration to the
+            application.
+        </p>
+
+        <h3>Exporting A Configuration</h3>
         <ol>
             <li>Select a configuration from the table.</li>
             <li>Select <strong>Export</strong>.</li>
             <li>Choose where to save the JSON file.</li>
+            <li>Confirm the save operation.</li>
         </ol>
 
-        <h3>Import</h3>
+        <h3>Importing Configurations</h3>
         <ol>
             <li>Select <strong>Import</strong>.</li>
-            <li>Choose a JSON file containing one configuration or a list of configurations.</li>
-            <li>The imported configurations are added with new IDs.</li>
+            <li>Choose a <code>.json</code> file.</li>
+            <li>The file may contain one configuration object or a list of configuration objects.</li>
+            <li>After import, check the configuration table for the newly added records.</li>
         </ol>
 
         <p>Example JSON:</p>
@@ -229,6 +200,146 @@
   "arguments": null,
   "expectedOutputPath": "expected/output.txt"
 }</code></pre>
+
+        <div class="note">
+            If the selected JSON file is broken, empty, duplicated, or missing required fields, the application should
+            show an error message instead of creating an invalid configuration.
+        </div>
+    </section>
+
+    <section>
+        <h2>Creating A Project</h2>
+        <p>
+            A project groups the information needed for an evaluation run. It normally contains a project name, a
+            submission location, optional expected-output files, and the configuration that matches the language of
+            the submissions.
+        </p>
+        <ol>
+            <li>Open the project screen.</li>
+            <li>Select <strong>New Project</strong> or the create action provided by the screen.</li>
+            <li>Enter the project name.</li>
+            <li>Select the folder that contains student submissions or source files.</li>
+            <li>Select the expected output file or expected output folder if output comparison is required.</li>
+            <li>Choose the configuration that matches the submissions.</li>
+            <li>Save the project.</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Running A Project</h2>
+        <ol>
+            <li>Open the saved project.</li>
+            <li>Confirm that the selected configuration, submission path, and expected output path are correct.</li>
+            <li>Select <strong>Run</strong> or <strong>Start Evaluation</strong>.</li>
+            <li>Wait until all submissions have been processed.</li>
+            <li>Open the results screen to review the generated statuses and messages.</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Reading The Results Screen</h2>
+        <p>
+            The results screen shows what happened during evaluation. Read each row by checking the submission name,
+            the status, and any message produced during compile, run, or output comparison.
+        </p>
+        <table>
+            <thead>
+            <tr>
+                <th>Status</th>
+                <th>Meaning</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Accepted</td>
+                <td>The program ran successfully and matched the expected output.</td>
+            </tr>
+            <tr>
+                <td>Compile error</td>
+                <td>The compile command failed, the source file was missing, or the compiler reported an error.</td>
+            </tr>
+            <tr>
+                <td>Runtime error</td>
+                <td>The program started but crashed, exited with an error code, or could not complete normally.</td>
+            </tr>
+            <tr>
+                <td>Wrong output</td>
+                <td>The program ran successfully, but the actual output did not match the expected output.</td>
+            </tr>
+            <tr>
+                <td>Timeout</td>
+                <td>The program took too long and was stopped before it completed.</td>
+            </tr>
+            <tr>
+                <td>Missing file</td>
+                <td>A required source, input, output, or expected-output file could not be found.</td>
+            </tr>
+            <tr>
+                <td>Configuration error</td>
+                <td>The selected configuration is incomplete or contains a command that cannot be executed.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Error Messages</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Message</th>
+                <th>What It Means</th>
+                <th>What To Check</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Configuration name is required.</td>
+                <td>The configuration was saved without a name.</td>
+                <td>Enter a unique, descriptive name.</td>
+            </tr>
+            <tr>
+                <td>Source file name is required.</td>
+                <td>The application does not know which submitted source file to run.</td>
+                <td>Enter the expected file name, such as <code>Main.java</code>.</td>
+            </tr>
+            <tr>
+                <td>Run command is required.</td>
+                <td>No execution command was provided.</td>
+                <td>Enter the command that starts the program.</td>
+            </tr>
+            <tr>
+                <td>Compile command is required for compiled languages.</td>
+                <td>The configuration is marked as compiled but has no compile command.</td>
+                <td>Enter a compile command or select <strong>Interpreted language</strong>.</td>
+            </tr>
+            <tr>
+                <td>Configurations could not be imported.</td>
+                <td>The selected file could not be read as a valid configuration JSON file.</td>
+                <td>Check that the file is valid JSON and includes all required fields.</td>
+            </tr>
+            <tr>
+                <td>Configuration could not be deleted.</td>
+                <td>The selected configuration could not be removed.</td>
+                <td>Check whether it is used by a project or whether the configuration file is writable.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Running The Application</h2>
+        <p>
+            IAE is a JavaFX application managed with Maven. From the project root, use:
+        </p>
+        <pre><code>mvn javafx:run</code></pre>
+        <p>
+            To compile the project and run tests, use:
+        </p>
+        <pre><code>mvn test</code></pre>
+        <p>
+            Make sure Java 17 or a compatible JDK is installed before running the application.
+        </p>
     </section>
 </main>
 </body>
