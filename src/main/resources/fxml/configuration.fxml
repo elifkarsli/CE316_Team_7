@@ -34,6 +34,7 @@
                 <Button fx:id="exportButton" mnemonicParsing="false" onAction="#handleExport" text="Export"/>
                 <Separator orientation="VERTICAL"/>
                 <Button fx:id="helpButton" mnemonicParsing="false" onAction="#handleHelp" text="Help"/>
+                <Button fx:id="exitButton" mnemonicParsing="false" onAction="#handleExit" text="Exit"/>
             </ToolBar>
         </VBox>
     </top>

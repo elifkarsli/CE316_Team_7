@@ -126,6 +126,8 @@ public class ConfigurationController {
             }
         } catch (IOException exception) {
             showError("Configuration could not be deleted.", exception);
+        } catch (IllegalStateException exception) {
+            showError("Configuration cannot be deleted.", exception);
         }
     }
 
@@ -196,6 +198,14 @@ public class ConfigurationController {
             dialog.show();
         } catch (IOException exception) {
             showError("Help screen could not be opened.", exception);
+        }
+    }
+
+    @FXML
+    private void handleExit() {
+        Window window = getWindow();
+        if (window != null) {
+            window.hide();
         }
     }
 
