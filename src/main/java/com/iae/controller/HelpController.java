@@ -8,12 +8,23 @@ import javafx.scene.web.WebView;
 import java.net.URL;
 
 public class HelpController {
+    private static final String MANUAL_RESOURCE_PATH = "/help/manual.html";
+
     @FXML
     private WebView manualWebView;
 
     @FXML
     private void initialize() {
-        URL manualUrl = getClass().getResource("/help/manual.html");
+        loadManual();
+    }
+
+    private void loadManual() {
+        if (manualWebView == null) {
+            showError("Manual viewer could not be initialized.");
+            return;
+        }
+
+        URL manualUrl = getClass().getResource(MANUAL_RESOURCE_PATH);
         if (manualUrl == null) {
             showError("Manual file could not be found.");
             return;
