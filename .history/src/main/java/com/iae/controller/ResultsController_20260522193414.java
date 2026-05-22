@@ -1,12 +1,9 @@
 package com.iae.controller;
 
-import java.util.List;
-
 import com.iae.model.Project;
 import com.iae.model.StudentResult;
 import com.iae.service.ProjectService;
 import com.iae.service.ReportService;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
@@ -23,6 +20,8 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 public class ResultsController {
     @FXML private Label projectTitleLabel;

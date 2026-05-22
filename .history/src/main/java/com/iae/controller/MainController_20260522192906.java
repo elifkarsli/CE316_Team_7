@@ -1,13 +1,7 @@
 package com.iae.controller;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.iae.model.Project;
 import com.iae.service.ProjectService;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +16,11 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainController {
 

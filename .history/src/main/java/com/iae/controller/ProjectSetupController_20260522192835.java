@@ -1,19 +1,19 @@
 package com.iae.controller;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.List;
-
 import com.iae.model.Configuration;
 import com.iae.model.Project;
 import com.iae.service.ConfigurationService;
 import com.iae.service.ProjectService;
-
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
 
 public class ProjectSetupController {
 

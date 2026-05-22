@@ -175,24 +175,14 @@ public class ProjectService {
                 continue;
             }
 
-            Path expectedOutputPath = null;
-            String expectedOutputPathValue = config.getExpectedOutputPath();
-            if (expectedOutputPathValue != null && !expectedOutputPathValue.isBlank()) {
-                expectedOutputPath = Paths.get(expectedOutputPathValue);
-            }
-
-            if (expectedOutputPath == null) {
-                result.setComparisonResult("NO_EXPECTED_OUTPUT");
-                result.setErrorDetails("Expected output path is not configured for this configuration.");
-            } else {
-                OutputComparator.ComparisonResult comparison = outputComparator.compare(
-                        rr.getStdout(),
-                        expectedOutputPath
-                );
-                result.setComparisonResult(comparison.name());
-                if (comparison == OutputComparator.ComparisonResult.FAIL) {
-                    result.setErrorDetails(outputComparator.getDiffSummary(rr.getStdout(), expectedOutputPath));
-                }
+            Path expectedOutputPath = Paths.get(config.getExpectedOutputPath());
+            OutputComparator.ComparisonResult comparison = outputComparator.compare(
+                    rr.getStdout(),
+                    expectedOutputPath
+            );
+            result.setComparisonResult(comparison.name());
+            if (comparison == OutputComparator.ComparisonResult.FAIL) {
+                result.setErrorDetails(outputComparator.getDiffSummary(rr.getStdout(), expectedOutputPath));
             }
             reportService.saveResult(result);
         }

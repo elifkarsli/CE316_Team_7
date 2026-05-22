@@ -1,4 +1,8 @@
 package com.iae.service;
+import com.iae.dao.DatabaseManager;
+import com.iae.dao.ProjectDAO;
+import com.iae.model.*;
+
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -13,13 +17,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import com.iae.dao.DatabaseManager;
-import com.iae.dao.ProjectDAO;
-import com.iae.model.Configuration;
-import com.iae.model.ProcessResult;
-import com.iae.model.Project;
-import com.iae.model.StudentResult;
 
 public class ProjectService {
     public static record SavedProjectInfo(String name, Path dbFile) {}
@@ -175,24 +172,14 @@ public class ProjectService {
                 continue;
             }
 
-            Path expectedOutputPath = null;
-            String expectedOutputPathValue = config.getExpectedOutputPath();
-            if (expectedOutputPathValue != null && !expectedOutputPathValue.isBlank()) {
-                expectedOutputPath = Paths.get(expectedOutputPathValue);
-            }
-
-            if (expectedOutputPath == null) {
-                result.setComparisonResult("NO_EXPECTED_OUTPUT");
-                result.setErrorDetails("Expected output path is not configured for this configuration.");
-            } else {
-                OutputComparator.ComparisonResult comparison = outputComparator.compare(
-                        rr.getStdout(),
-                        expectedOutputPath
-                );
-                result.setComparisonResult(comparison.name());
-                if (comparison == OutputComparator.ComparisonResult.FAIL) {
-                    result.setErrorDetails(outputComparator.getDiffSummary(rr.getStdout(), expectedOutputPath));
-                }
+            Path expectedOutputPath = Paths.get(config.getExpectedOutputPath());
+            OutputComparator.ComparisonResult comparison = outputComparator.compare(
+                    rr.getStdout(),
+                    expectedOutputPath
+            );
+            result.setComparisonResult(comparison.name());
+            if (comparison == OutputComparator.ComparisonResult.FAIL) {
+                result.setErrorDetails(outputComparator.getDiffSummary(rr.getStdout(), expectedOutputPath));
             }
             reportService.saveResult(result);
         }
