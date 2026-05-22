@@ -1,13 +1,18 @@
 package com.iae.service;
-import com.iae.dao.DatabaseManager;
-import com.iae.dao.ProjectDAO;
-import com.iae.model.*;
-
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+
+import com.iae.dao.DatabaseManager;
+import com.iae.dao.ProjectDAO;
+import com.iae.model.Configuration;
+import com.iae.model.ProcessResult;
+import com.iae.model.Project;
+import com.iae.model.StudentResult;
 
 public class ProjectService {
     private ProjectDAO projectDAO = new ProjectDAO();
@@ -18,9 +23,15 @@ public class ProjectService {
     private OutputComparator outputComparator = new OutputComparator();
 
     public Project createProject(String name, int configId, Path submissionsDir) throws Exception {
+        Configuration config = configService.findById(configId)
+                .orElseThrow(() -> new Exception("Configuration not found: " + configId));
+
+        Path projectDbFile = createProjectDatabaseFile(name);
+        safeReconnectDatabase(projectDbFile);
+
         Project p = new Project();
         p.setName(name);
-        p.setConfigurationId(configId);
+        p.setConfigurationId(config.getId());
         p.setSubmissionsDirectory(submissionsDir.toString());
         p.setCreatedDate(LocalDate.now().toString());
         projectDAO.save(p);
@@ -28,10 +39,54 @@ public class ProjectService {
     }
 
     public Project openProject(Path dbFile) throws Exception {
-        DatabaseManager.getInstance().connect(dbFile.toString());
+        safeReconnectDatabase(dbFile);
         List<Project> projects = projectDAO.findAll();
         if (projects.isEmpty()) throw new Exception("No project found in this file.");
         return projects.get(0);
+    }
+
+    public void saveProject(Project project) throws SQLException {
+        if (project.getId() == 0) {
+            projectDAO.save(project);
+        } else {
+            projectDAO.update(project);
+        }
+    }
+
+    private void safeReconnectDatabase(Path dbFile) throws SQLException {
+        DatabaseManager dbManager = DatabaseManager.getInstance();
+        try {
+            dbManager.disconnect();
+        } catch (SQLException ignored) {
+            // ignore if there is no active connection
+        }
+        dbManager.connect(dbFile.toAbsolutePath().toString());
+    }
+
+    private Path createProjectDatabaseFile(String projectName) throws IOException {
+        Path dataDir = Paths.get("data");
+        if (Files.notExists(dataDir)) {
+            Files.createDirectories(dataDir);
+        }
+
+        String safeName = sanitizeProjectName(projectName);
+        Path projectFile = dataDir.resolve(safeName + ".iaedb");
+        int suffix = 1;
+        while (Files.exists(projectFile)) {
+            projectFile = dataDir.resolve(safeName + "_" + suffix + ".iaedb");
+            suffix++;
+        }
+        return projectFile;
+    }
+
+    private String sanitizeProjectName(String projectName) {
+        String sanitized = projectName == null ? "project" : projectName.trim();
+        sanitized = sanitized.replaceAll("[^\\w\\- ]", "_");
+        sanitized = sanitized.replaceAll("\\s+", "_");
+        if (sanitized.isEmpty()) {
+            sanitized = "project";
+        }
+        return sanitized;
     }
 
     public void runProject(Project project) throws Exception {
