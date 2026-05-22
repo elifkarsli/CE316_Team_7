@@ -42,8 +42,18 @@ public class ExecutionEngine {
                 ""
         );
 
-        for (String token : command.trim().split("\\s+")) {
-            if (!token.isEmpty()) commandList.add(token);
+        String[] parts = command.trim().split("\\s+");
+        boolean first = true;
+        for (String token : parts) {
+            if (token.isEmpty()) continue;
+            if (first) {
+                // Resolve the executable against the working directory
+                Path exePath = studentDir.resolve(token);
+                commandList.add(exePath.toAbsolutePath().toString());
+                first = false;
+            } else {
+                commandList.add(token);
+            }
         }
 
         String arguments = config.getArguments();
