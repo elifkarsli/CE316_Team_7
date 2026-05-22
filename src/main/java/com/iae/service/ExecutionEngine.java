@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class ExecutionEngine {
@@ -22,7 +24,7 @@ public class ExecutionEngine {
                 config.getCompileCommand(),
                 config.getSourceFileName(),
                 config.getOutputFileName(),
-                config.getArguments()
+                ""
         );
 
         System.out.println("Compiling: " + command);
@@ -30,20 +32,108 @@ public class ExecutionEngine {
     }
 
     public ProcessResult run(Configuration config, Path studentDir) {
+
+        List<String> commandList = new ArrayList<>();
+
         String command = resolvePlaceholders(
                 config.getRunCommand(),
                 config.getSourceFileName(),
                 config.getOutputFileName(),
-                config.getArguments()
+                ""
         );
 
+        for (String token : command.trim().split("\\s+")) {
+            if (!token.isEmpty()) commandList.add(token);
+        }
+
+        String arguments = config.getArguments();
+        if (arguments != null && !arguments.isBlank()) {
+            for (String arg : arguments.trim().split("\\s+")) {
+                if (!arg.isEmpty()) commandList.add(arg);
+            }
+        }
         System.out.println("Running: " + command);
-        return executeCommand(command, studentDir);
+        return executeCommandList(commandList, studentDir);
     }
 
-    private ProcessResult executeCommand(String command, Path workingDir) {
-        // Split command string into tokens for ProcessBuilder
-        String[] tokens = command.trim().split("\\s+");
+    private ProcessResult executeCommandList(List<String> tokens, Path workingDir) {
+        ProcessBuilder pb = new ProcessBuilder(tokens);
+        pb.directory(workingDir.toFile());
+        pb.redirectErrorStream(false);
+
+        Process process;
+        try {
+            process = pb.start();
+        } catch (IOException e) {
+            System.out.println("WARNING: Failed to start process: " + e.getMessage());
+            return new ProcessResult(-1, "", "Failed to start process: " + e.getMessage());
+        }
+
+        StringBuilder stdoutBuilder = new StringBuilder();
+        StringBuilder stderrBuilder = new StringBuilder();
+
+        Thread stdoutThread = new Thread(() -> {
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stdoutBuilder.append(line).append("\n");
+                }
+            } catch (IOException e) {
+                System.out.println("WARNING: Error reading stdout");
+            }
+        });
+
+        Thread stderrThread = new Thread(() -> {
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getErrorStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stderrBuilder.append(line).append("\n");
+                }
+            } catch (IOException e) {
+                System.out.println("WARNING: Error reading stderr");
+            }
+        });
+
+        stdoutThread.start();
+        stderrThread.start();
+
+        boolean finished;
+        try {
+            finished = process.waitFor(DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            process.destroyForcibly();
+            return new ProcessResult(-1, "", "Process interrupted: " + e.getMessage());
+        }
+
+        if (!finished) {
+            process.destroyForcibly();
+            System.out.println("WARNING: Process timed out after " + DEFAULT_TIMEOUT_SECONDS + "s");
+            return new ProcessResult(-1, stdoutBuilder.toString(),
+                    "TIMEOUT: Process exceeded " + DEFAULT_TIMEOUT_SECONDS + " second limit.");
+        }
+
+        try {
+            stdoutThread.join(2000);
+            stderrThread.join(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        int exitCode = process.exitValue();
+        System.out.println("Process finished with exit code: " + exitCode);
+        return new ProcessResult(exitCode, stdoutBuilder.toString(), stderrBuilder.toString());
+    }
+        private ProcessResult executeCommand(String command, Path workingDir) {
+
+        List<String> tokens = new ArrayList<>();
+        for (String token : command.trim().split("\\s+")) {
+            if (!token.isEmpty()) {
+                tokens.add(token);
+            }
+        }
 
         ProcessBuilder pb = new ProcessBuilder(tokens);
         pb.directory(workingDir.toFile());
@@ -149,8 +239,12 @@ public class ExecutionEngine {
 
         resolved = resolved.replace("{sourceFile}", sourceFileName != null ? sourceFileName : "");
         resolved = resolved.replace("{outputFile}", outputFileName != null ? outputFileName : "");
-        resolved = resolved.replace("{args}",       arguments      != null ? arguments      : "");
 
-        return resolved;
+        if (resolved.contains("{args}")) {
+            resolved = resolved.replace("{args}", arguments != null ? arguments : "");
+        } else if (arguments != null && !arguments.isBlank()) {
+            resolved = resolved + " " + arguments;
+        }
+            return resolved;
     }
 }
