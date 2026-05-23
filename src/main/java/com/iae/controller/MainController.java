@@ -14,10 +14,13 @@ import javafx.scene.control.Labeled;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.StackPane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.URL;
 import java.sql.SQLException;
 
 public class MainController {
@@ -43,7 +46,10 @@ public class MainController {
             }
         });
 
-        Platform.runLater(this::wireExitMenuClick);
+        Platform.runLater(() -> {
+            wireExitMenuClick();
+            wireHelpMenuClick();
+        });
     }
 
     @FXML
@@ -104,14 +110,26 @@ public class MainController {
     @FXML
     void handleHelp() {
         try {
-            Stage helpStage = new Stage();
-            Parent view = FXMLLoader.load(
-                    getClass().getResource("/fxml/help.fxml"));
-            helpStage.setScene(new Scene(view, 900, 650));
-            helpStage.setTitle("IAE – User Manual");
-            helpStage.show();
+            WebView webView = new WebView();
+            WebEngine engine = webView.getEngine();
+
+            URL manualUrl = getClass().getResource("/help/manual.html");
+
+            if (manualUrl == null) {
+                showError("Help Error", "Manual file could not be found.");
+                return;
+            }
+
+            engine.load(manualUrl.toExternalForm());
+
+            Stage stage = new Stage();
+            stage.setTitle("IAE User Manual");
+            stage.setScene(new Scene(webView, 900, 650));
+            stage.show();
+
         } catch (Exception e) {
-            showError("Help Error", "Could not open the user manual: " + e.getMessage());
+            showError("Help Error",
+                    "Could not open the user manual: " + e.getMessage());
         }
     }
 
@@ -134,6 +152,28 @@ public class MainController {
                     event.consume();
                     handleExit();
                 });
+                return;
+            }
+        }
+    }
+    private void wireHelpMenuClick() {
+        for (Node menuNode : menuBar.lookupAll(".menu")) {
+
+            Node labelNode = menuNode.lookup(".label");
+
+            if (labelNode instanceof Labeled label
+                    && "Help".equals(label.getText())) {
+
+                menuNode.setOnMouseClicked(event -> {
+                    event.consume();
+                    handleHelp();
+                });
+
+                labelNode.setOnMouseClicked(event -> {
+                    event.consume();
+                    handleHelp();
+                });
+
                 return;
             }
         }
