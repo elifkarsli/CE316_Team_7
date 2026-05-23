@@ -1,13 +1,7 @@
 package com.iae.controller;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.iae.model.Project;
 import com.iae.service.ProjectService;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +17,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.sql.SQLException;
+
 public class MainController {
 
     @FXML private StackPane    contentArea;
@@ -32,54 +29,21 @@ public class MainController {
     @FXML private MenuBar      menuBar;
 
     private final ProjectService projectService = new ProjectService();
-    private final Map<String, Path> savedProjectFiles = new HashMap<>();
 
     @FXML
     private void initialize() {
         statusBar.setText("Ready");
-        loadSavedProjects();
 
         projectListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 String selected = projectListView.getSelectionModel().getSelectedItem();
                 if (selected != null) {
-                    Path projectPath = savedProjectFiles.get(selected);
-                    if (projectPath != null) {
-                        openSavedProject(projectPath);
-                    } else {
-                        statusBar.setText("This project is not saved yet. Use File > Open Project to open an existing file.");
-                    }
+                    statusBar.setText("Double-click to re-open projects via File > Open Project.");
                 }
             }
         });
 
         Platform.runLater(this::wireExitMenuClick);
-    }
-
-    private void loadSavedProjects() {
-        savedProjectFiles.clear();
-        try {
-            for (ProjectService.SavedProjectInfo info : projectService.listSavedProjects()) {
-                addToSidebar(info.name());
-                savedProjectFiles.put(info.name(), info.dbFile());
-            }
-        } catch (Exception e) {
-            statusBar.setText("Could not load saved projects: " + e.getMessage());
-        }
-    }
-
-    public void refreshSavedProjects() {
-        loadSavedProjects();
-    }
-
-    private void openSavedProject(Path dbFile) {
-        try {
-            Project project = projectService.openProject(dbFile);
-            loadResultsView(project);
-            statusBar.setText("Opened: " + project.getName());
-        } catch (Exception e) {
-            showError("Open Error", "Could not open saved project: " + e.getMessage());
-        }
     }
 
     @FXML
@@ -115,7 +79,6 @@ public class MainController {
         try {
             Project project = projectService.openProject(file.toPath());
             addToSidebar(project.getName());
-            savedProjectFiles.put(project.getName(), file.toPath());
             loadResultsView(project);
             statusBar.setText("Opened: " + project.getName());
         } catch (Exception e) {
