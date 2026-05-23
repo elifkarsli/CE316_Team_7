@@ -43,17 +43,12 @@ public class ProjectService {
             return name.endsWith(".iaedb") || name.endsWith(".db");
         })) {
             for (Path dbFile : stream) {
-                Path normalizedDbFile = normalizeDbPath(dbFile);
-                Optional<Project> project = readProjectFromDatabase(normalizedDbFile);
-                project.ifPresent(value -> savedProjects.add(new SavedProjectInfo(value.getName(), normalizedDbFile)));
+                Optional<Project> project = readProjectFromDatabase(dbFile);
+                project.ifPresent(value -> savedProjects.add(new SavedProjectInfo(value.getName(), dbFile)));
             }
         }
 
         return savedProjects;
-    }
-
-    private Path normalizeDbPath(Path dbFile) {
-        return dbFile.toAbsolutePath().normalize();
     }
 
     private Optional<Project> readProjectFromDatabase(Path dbFile) throws IOException {
@@ -94,8 +89,7 @@ public class ProjectService {
     }
 
     public Project openProject(Path dbFile) throws Exception {
-        Path normalizedDbFile = normalizeDbPath(dbFile);
-        safeReconnectDatabase(normalizedDbFile);
+        safeReconnectDatabase(dbFile);
         List<Project> projects = projectDAO.findAll();
         if (projects.isEmpty()) throw new Exception("No project found in this file.");
         return projects.get(0);

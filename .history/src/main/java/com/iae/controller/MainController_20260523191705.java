@@ -197,7 +197,7 @@ public class MainController {
     }
 
     private String formatDisplayLabel(ProjectService.SavedProjectInfo info) {
-        return String.format("%s - %s", info.name(), info.dbFile().getFileName());
+        return String.format("%s (%s)", info.name(), info.dbFile().getFileName());
     }
 
     private void swapContent(Parent view) {

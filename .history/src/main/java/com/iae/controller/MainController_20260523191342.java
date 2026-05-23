@@ -188,16 +188,13 @@ public class MainController {
     }
 
     public void addToSidebar(ProjectService.SavedProjectInfo projectInfo) {
-        boolean alreadyPresent = projectListView.getItems().stream()
-                .anyMatch(existing -> existing.dbFile().toAbsolutePath().normalize()
-                        .equals(projectInfo.dbFile().toAbsolutePath().normalize()));
-        if (!alreadyPresent) {
+        if (!projectListView.getItems().contains(projectInfo)) {
             projectListView.getItems().add(projectInfo);
         }
     }
 
     private String formatDisplayLabel(ProjectService.SavedProjectInfo info) {
-        return String.format("%s - %s", info.name(), info.dbFile().getFileName());
+        return String.format("%s (%s)", info.name(), info.dbFile().getFileName());
     }
 
     private void swapContent(Parent view) {
