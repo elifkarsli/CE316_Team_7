@@ -16,9 +16,11 @@
             <Menu text="Configurations">
                 <MenuItem text="Manage Configurations..." onAction="#handleManageConfigs"/>
             </Menu>
-            <Menu text="Help"/>
-            <Menu text="Exit" onAction="#handleExit" onShowing="#handleExit">
-                <MenuItem text="Exit" visible="false"/>
+            <Menu text="Help">
+                <MenuItem text="User Manual" onAction="#handleHelp"/>
+            </Menu>
+            <Menu text="Exit">
+                <MenuItem text="Exit" onAction="#handleExit"/>
             </Menu>
         </MenuBar>
     </top>

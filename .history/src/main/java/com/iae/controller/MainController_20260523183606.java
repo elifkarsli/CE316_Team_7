@@ -1,25 +1,26 @@
 package com.iae.controller;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.iae.model.Project;
 import com.iae.service.ProjectService;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainController {
 
@@ -50,6 +51,8 @@ public class MainController {
                 }
             }
         });
+
+        Platform.runLater(this::wireExitMenuClick);
     }
 
     private void loadSavedProjects() {
@@ -115,7 +118,6 @@ public class MainController {
         try {
             Project project = projectService.openProject(file.toPath());
             addToSidebar(project.getName());
-            savedProjectFiles.put(project.getName(), file.toPath());
             loadResultsView(project);
             statusBar.setText("Opened: " + project.getName());
         } catch (Exception e) {
@@ -157,6 +159,23 @@ public class MainController {
     void handleExit() {
         Platform.exit();
         Runtime.getRuntime().halt(0);
+    }
+
+    private void wireExitMenuClick() {
+        for (Node menuNode : menuBar.lookupAll(".menu")) {
+            Node labelNode = menuNode.lookup(".label");
+            if (labelNode instanceof Labeled label && "Exit".equals(label.getText())) {
+                menuNode.setOnMouseClicked(event -> {
+                    event.consume();
+                    handleExit();
+                });
+                labelNode.setOnMouseClicked(event -> {
+                    event.consume();
+                    handleExit();
+                });
+                return;
+            }
+        }
     }
 
 
