@@ -11,7 +11,6 @@
     <top>
         <VBox>
             <VBox styleClass="hero-banner" spacing="3">
-                <Label text="IAE" styleClass="brand-kicker"/>
                 <Label text="Integrated Assignment Environment" styleClass="brand-title"/>
             </VBox>
 
