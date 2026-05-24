@@ -119,6 +119,10 @@ public class MainController {
             showError("Open Error", "Could not open project: " + e.getMessage());
         }
     }
+    @FXML
+    void handleConfigsClick(MouseEvent event) {
+        handleManageConfigs();
+    }
 
     @FXML
     void handleManageConfigs() {
@@ -131,6 +135,10 @@ public class MainController {
             showError("Navigation Error",
                     "Could not load configurations screen: " + e.getMessage());
         }
+    }
+    @FXML
+    void handleHelpClick(MouseEvent event) {
+        handleHelp();
     }
 
     @FXML

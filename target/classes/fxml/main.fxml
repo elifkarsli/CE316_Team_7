@@ -21,13 +21,9 @@
                         <MenuItem text="New Project..." onAction="#handleNewProject"/>
                         <MenuItem text="Open Project..." onAction="#handleOpenProject"/>
                     </Menu>
-                    <Menu text="Configurations">
-                        <MenuItem text="Manage Configurations..." onAction="#handleManageConfigs"/>
-                    </Menu>
-                    <Menu text="Help">
-                        <MenuItem text="User Manual" onAction="#handleHelp"/>
-                    </Menu>
                 </MenuBar>
+                <Label text="Configurations" onMouseClicked="#handleConfigsClick" styleClass="menu-exit-link"/>
+                <Label text="Help" onMouseClicked="#handleHelpClick" styleClass="menu-exit-link"/>
                 <Label text="Exit" onMouseClicked="#handleExitClick" styleClass="menu-exit-link"/>
             </HBox>
         </VBox>
