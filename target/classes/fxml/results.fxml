@@ -6,58 +6,67 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.6"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.iae.controller.ResultsController">
+            fx:controller="com.iae.controller.ResultsController"
+            styleClass="screen-shell">
 
     <top>
-        <VBox spacing="10" style="-fx-padding:16 16 8 16; -fx-background-color:#F7F9FC;">
-            <HBox alignment="CENTER_LEFT" spacing="12">
-                <Label fx:id="projectTitleLabel"
-                       text="Results"
-                       style="-fx-font-size:20; -fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
-                <Label fx:id="lastRunLabel"
+        <VBox spacing="20" styleClass="screen-header-wrap">
+            <HBox styleClass="surface-card hero-strip" spacing="18">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label fx:id="projectTitleLabel"
+                           text="Results"
+                           styleClass="page-title"/>
+                    <Label fx:id="lastRunLabel"
+                           text=""
+                           styleClass="page-subtitle"/>
+                </VBox>
+                <Label fx:id="summaryLabel"
                        text=""
-                       style="-fx-font-size:12; -fx-text-fill:#888888;"/>
+                       styleClass="summary-chip"
+                       wrapText="true"/>
             </HBox>
 
-            <ToolBar>
+            <HBox styleClass="surface-card toolbar-card" spacing="14" alignment="CENTER_LEFT">
                 <Button fx:id="runButton"
                         text="Run Project"
                         onAction="#handleRun"
-                        style="-fx-background-color:#1F3864; -fx-text-fill:white;
-                               -fx-padding:6 16; -fx-background-radius:4;"/>
-                <Separator orientation="VERTICAL"/>
+                        styleClass="primary-button"/>
                 <Button fx:id="viewDetailsButton"
                         text="View Details"
                         onAction="#handleViewDetails"
-                        disable="true"/>
-                <Separator orientation="VERTICAL"/>
-                <Label fx:id="summaryLabel" text="" style="-fx-text-fill:#555555;"/>
-            </ToolBar>
+                        disable="true"
+                        styleClass="secondary-button"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Rows are tinted by outcome and open in a modal detail view."
+                       styleClass="toolbar-note" wrapText="true"/>
+            </HBox>
         </VBox>
     </top>
 
     <center>
-        <TableView fx:id="resultTable" BorderPane.alignment="CENTER">
+        <TableView fx:id="resultTable"
+                   BorderPane.alignment="CENTER"
+                   styleClass="data-table results-table">
             <BorderPane.margin>
-                <Insets top="8" right="16" bottom="16" left="16"/>
+                <Insets top="12" right="18" bottom="18" left="18"/>
             </BorderPane.margin>
             <placeholder>
                 <Label text="No results yet. Click Run Project to evaluate submissions."
-                       style="-fx-text-fill:#888888;"/>
+                       styleClass="empty-state"/>
             </placeholder>
             <columns>
                 <TableColumn fx:id="colStudentId"
                              text="Student ID"
-                             minWidth="140" prefWidth="180"/>
+                             minWidth="150" prefWidth="170"/>
                 <TableColumn fx:id="colCompileStatus"
                              text="Compile Status"
-                             minWidth="120" prefWidth="150"/>
+                             minWidth="130" prefWidth="150"/>
                 <TableColumn fx:id="colRunStatus"
                              text="Run Status"
-                             minWidth="120" prefWidth="140"/>
+                             minWidth="130" prefWidth="150"/>
                 <TableColumn fx:id="colComparison"
                              text="Output Result"
-                             minWidth="120" prefWidth="140"/>
+                             minWidth="140" prefWidth="170"/>
                 <TableColumn fx:id="colOverall"
                              text="Overall"
                              minWidth="90" prefWidth="100"/>

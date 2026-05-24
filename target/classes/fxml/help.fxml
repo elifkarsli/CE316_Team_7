@@ -6,8 +6,9 @@
 <BorderPane prefHeight="650.0" prefWidth="900.0"
             xmlns="http://javafx.com/javafx/17.0.6"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.iae.controller.HelpController">
+            fx:controller="com.iae.controller.HelpController"
+            styleClass="screen-shell">
     <center>
-        <WebView fx:id="manualWebView" prefHeight="650.0" prefWidth="900.0"/>
+        <WebView fx:id="manualWebView" minHeight="400.0" minWidth="600.0"/>
     </center>
 </BorderPane>

@@ -6,6 +6,8 @@
     "runCommand": "./main",
     "sourceFileName": "main.c",
     "outputFileName": "main",
-    "interpreted": false
+    "interpreted": false,
+    "arguments": "85 90 70",
+    "expectedOutputPath": "/Users/ilkinesen/Desktop/expected_output.txt"
   }
 ]

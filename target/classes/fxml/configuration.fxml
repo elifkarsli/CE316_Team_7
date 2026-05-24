@@ -14,32 +14,41 @@
 <BorderPane prefHeight="600.0" prefWidth="900.0"
             xmlns="http://javafx.com/javafx/17.0.6"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.iae.controller.ConfigurationController">
+            fx:controller="com.iae.controller.ConfigurationController"
+            styleClass="screen-shell">
     <top>
-        <VBox spacing="12.0" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets bottom="8.0" left="16.0" right="16.0" top="16.0"/>
-            </padding>
-
-            <HBox alignment="CENTER_LEFT" spacing="12.0">
-                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Configurations"/>
+        <VBox spacing="12.0" BorderPane.alignment="CENTER" styleClass="screen-header-wrap">
+            <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="surface-card hero-strip">
+                <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                    <Label styleClass="page-title" text="Configurations"/>
+                    <Label styleClass="page-subtitle"
+                           text="Build, import, export, and refine the language presets that power each project."/>
+                </VBox>
             </HBox>
 
-            <ToolBar>
-                <Button fx:id="newButton" mnemonicParsing="false" onAction="#handleNew" text="New"/>
-                <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEdit" text="Edit"/>
-                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" text="Delete"/>
+            <ToolBar styleClass="toolbar-card">
+                <Button fx:id="newButton" mnemonicParsing="false" onAction="#handleNew" text="New"
+                        styleClass="primary-button"/>
+                <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEdit" text="Edit"
+                        styleClass="secondary-button"/>
+                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" text="Delete"
+                        styleClass="danger-button"/>
                 <Separator orientation="VERTICAL"/>
-                <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImport" text="Import"/>
-                <Button fx:id="exportButton" mnemonicParsing="false" onAction="#handleExport" text="Export"/>
+                <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImport" text="Import"
+                        styleClass="secondary-button"/>
+                <Button fx:id="exportButton" mnemonicParsing="false" onAction="#handleExport" text="Export"
+                        styleClass="secondary-button"/>
                 <Separator orientation="VERTICAL"/>
-                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#handleHelp" text="Help"/>
+                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#handleHelp" text="Help"
+                        styleClass="ghost-button"/>
+                <Button fx:id="exitButton" mnemonicParsing="false" onAction="#handleExit" text="Exit"
+                        styleClass="ghost-button"/>
             </ToolBar>
         </VBox>
     </top>
 
     <center>
-        <TableView fx:id="configurationTable" BorderPane.alignment="CENTER">
+        <TableView fx:id="configurationTable" BorderPane.alignment="CENTER" styleClass="data-table">
             <BorderPane.margin>
                 <Insets bottom="16.0" left="16.0" right="16.0" top="8.0"/>
             </BorderPane.margin>
