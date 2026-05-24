@@ -1,5 +1,8 @@
+com/iae/controller/ResultDetailController.class
 com/iae/controller/ConfigurationController.class
+com/iae/service/ReportService.class
 com/iae/controller/ResultsController$1.class
+com/iae/service/OutputComparator$ComparisonResult.class
 com/iae/service/ZipHandler.class
 com/iae/controller/ResultsController.class
 com/iae/controller/HelpController.class
@@ -7,6 +10,7 @@ com/iae/dao/ConfigurationDAO.class
 com/iae/controller/ProjectSetupController.class
 com/iae/service/OutputComparator.class
 com/iae/controller/ConfigEditController.class
+com/iae/ui/UiTheme.class
 com/iae/model/StudentResult.class
 com/iae/dao/DatabaseManager.class
 com/iae/model/Project.class
@@ -18,6 +22,7 @@ com/iae/controller/ResultsController$2.class
 com/iae/model/Configuration.class
 com/iae/service/ProjectService.class
 com/iae/model/ProcessResult.class
+com/iae/service/ProjectService$SavedProjectInfo.class
 com/iae/controller/MainController.class
 com/iae/MainApp.class
 com/iae/dao/ProjectDAO.class

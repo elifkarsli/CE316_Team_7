@@ -39,10 +39,6 @@
                 <Button fx:id="exportButton" mnemonicParsing="false" onAction="#handleExport" text="Export"
                         styleClass="secondary-button"/>
                 <Separator orientation="VERTICAL"/>
-                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#handleHelp" text="Help"
-                        styleClass="ghost-button"/>
-                <Button fx:id="exitButton" mnemonicParsing="false" onAction="#handleExit" text="Exit"
-                        styleClass="ghost-button"/>
             </ToolBar>
         </VBox>
     </top>

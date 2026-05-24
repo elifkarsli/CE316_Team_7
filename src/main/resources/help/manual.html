@@ -5,12 +5,12 @@
     <title>IAE User Manual</title>
     <style>
         :root {
-            color-scheme: dark;
+            color-scheme: light;
         }
 
         body {
-            background: radial-gradient(circle at top, rgba(95, 168, 141, 0.16), transparent 34%), #08100e;
-            color: #e6efea;
+            background: radial-gradient(circle at top, rgba(255, 184, 140, 0.12), transparent 34%), #FFF4E6;
+            color: #5C3D2E;
             font-family: "Segoe UI", Arial, Helvetica, sans-serif;
             line-height: 1.55;
             margin: 0;
@@ -25,30 +25,30 @@
         }
 
         h1 {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-            color: #f5f9f7;
+            border-bottom: 1px solid rgba(255, 184, 140, 0.3);
+            color: #5C3D2E;
             font-size: 32px;
             margin: 0 0 20px;
             padding-bottom: 14px;
         }
 
         h2 {
-            color: #d6eee4;
+            color: #8B6F47;
             font-size: 22px;
             margin: 0 0 14px;
         }
 
         h3 {
-            color: #c3ddd3;
+            color: #A0826F;
             font-size: 17px;
             margin: 18px 0 10px;
         }
 
         section {
-            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.025));
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(to bottom right, rgba(255, 184, 140, 0.06), rgba(255, 184, 140, 0.03));
+            border: 1px solid rgba(255, 184, 140, 0.25);
             border-radius: 20px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+            box-shadow: 0 12px 28px rgba(92, 61, 46, 0.08);
             margin: 0 0 18px;
             padding: 22px 24px;
         }
@@ -56,30 +56,30 @@
         p,
         li,
         td {
-            color: rgba(230, 239, 234, 0.92);
+            color: rgba(92, 61, 46, 0.88);
         }
 
         code {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 184, 140, 0.1);
+            border: 1px solid rgba(255, 184, 140, 0.2);
             border-radius: 6px;
-            color: #eef7f3;
+            color: #8B6F47;
             font-family: Consolas, Monaco, monospace;
             padding: 2px 6px;
         }
 
         pre {
-            background: #0c1412;
-            border: 1px solid rgba(95, 168, 141, 0.18);
-            border-left: 4px solid #5fa88d;
+            background: #FFFBF7;
+            border: 1px solid rgba(255, 184, 140, 0.25);
+            border-left: 4px solid #FFA366;
             border-radius: 16px;
-            color: #edf4f0;
+            color: #5C3D2E;
             overflow-x: auto;
             padding: 14px 16px;
         }
 
         table {
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 184, 140, 0.25);
             border-collapse: separate;
             border-spacing: 0;
             border-radius: 16px;
@@ -90,8 +90,8 @@
 
         th,
         td {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-            border-right: 1px solid rgba(255, 255, 255, 0.07);
+            border-bottom: 1px solid rgba(255, 184, 140, 0.15);
+            border-right: 1px solid rgba(255, 184, 140, 0.15);
             padding: 10px 12px;
             text-align: left;
             vertical-align: top;
@@ -107,17 +107,17 @@
         }
 
         th {
-            background: linear-gradient(to right, #111814, #16201c);
-            color: #f5f9f7;
+            background: linear-gradient(to right, #FFD9C0, #FFCBA4);
+            color: #5C3D2E;
             font-weight: 700;
         }
 
         .note {
-            background: rgba(95, 168, 141, 0.08);
-            border: 1px solid rgba(95, 168, 141, 0.18);
-            border-left: 4px solid #5fa88d;
+            background: rgba(255, 184, 140, 0.08);
+            border: 1px solid rgba(255, 184, 140, 0.25);
+            border-left: 4px solid #FFA366;
             border-radius: 14px;
-            color: #eaf4ef;
+            color: #5C3D2E;
             margin: 16px 0 0;
             padding: 12px 14px;
         }
@@ -373,20 +373,6 @@
         </table>
     </section>
 
-    <section>
-        <h2>Running The Application</h2>
-        <p>
-            IAE is a JavaFX application managed with Maven. From the project root, use:
-        </p>
-        <pre><code>mvn javafx:run</code></pre>
-        <p>
-            To compile the project and run tests, use:
-        </p>
-        <pre><code>mvn test</code></pre>
-        <p>
-            Make sure Java 17 or a compatible JDK is installed before running the application.
-        </p>
-    </section>
 </main>
 </body>
 </html>
