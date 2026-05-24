@@ -4,75 +4,121 @@
     <meta charset="UTF-8">
     <title>IAE User Manual</title>
     <style>
+        :root {
+            color-scheme: dark;
+        }
+
         body {
-            color: #1f2933;
-            font-family: Arial, Helvetica, sans-serif;
+            background: radial-gradient(circle at top, rgba(95, 168, 141, 0.16), transparent 34%), #08100e;
+            color: #e6efea;
+            font-family: "Segoe UI", Arial, Helvetica, sans-serif;
             line-height: 1.55;
             margin: 0;
-            padding: 28px;
+            min-height: 100vh;
+            padding: 0;
         }
 
         main {
             margin: 0 auto;
-            max-width: 920px;
+            max-width: 980px;
+            padding: 28px 22px 40px;
         }
 
         h1 {
-            border-bottom: 2px solid #d9e2ec;
-            font-size: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+            color: #f5f9f7;
+            font-size: 32px;
             margin: 0 0 20px;
-            padding-bottom: 12px;
+            padding-bottom: 14px;
         }
 
         h2 {
-            color: #102a43;
-            font-size: 21px;
-            margin-top: 30px;
+            color: #d6eee4;
+            font-size: 22px;
+            margin: 0 0 14px;
         }
 
         h3 {
-            color: #243b53;
+            color: #c3ddd3;
             font-size: 17px;
-            margin-top: 18px;
+            margin: 18px 0 10px;
+        }
+
+        section {
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.025));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+            margin: 0 0 18px;
+            padding: 22px 24px;
+        }
+
+        p,
+        li,
+        td {
+            color: rgba(230, 239, 234, 0.92);
         }
 
         code {
-            background: #f0f4f8;
-            border-radius: 4px;
-            color: #102a43;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            color: #eef7f3;
             font-family: Consolas, Monaco, monospace;
-            padding: 2px 5px;
+            padding: 2px 6px;
         }
 
         pre {
-            background: #f0f4f8;
-            border-left: 4px solid #486581;
+            background: #0c1412;
+            border: 1px solid rgba(95, 168, 141, 0.18);
+            border-left: 4px solid #5fa88d;
+            border-radius: 16px;
+            color: #edf4f0;
             overflow-x: auto;
-            padding: 14px;
+            padding: 14px 16px;
         }
 
         table {
-            border-collapse: collapse;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 16px;
             margin-top: 12px;
+            overflow: hidden;
             width: 100%;
         }
 
         th,
         td {
-            border: 1px solid #d9e2ec;
-            padding: 9px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            border-right: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 10px 12px;
             text-align: left;
             vertical-align: top;
         }
 
+        th:last-child,
+        td:last-child {
+            border-right: 0;
+        }
+
+        tr:last-child td {
+            border-bottom: 0;
+        }
+
         th {
-            background: #f0f4f8;
+            background: linear-gradient(to right, #111814, #16201c);
+            color: #f5f9f7;
+            font-weight: 700;
         }
 
         .note {
-            background: #f8fafc;
-            border-left: 4px solid #627d98;
-            margin: 16px 0;
+            background: rgba(95, 168, 141, 0.08);
+            border: 1px solid rgba(95, 168, 141, 0.18);
+            border-left: 4px solid #5fa88d;
+            border-radius: 14px;
+            color: #eaf4ef;
+            margin: 16px 0 0;
             padding: 12px 14px;
         }
     </style>

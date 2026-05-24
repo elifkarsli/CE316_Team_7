@@ -12,9 +12,9 @@
             styleClass="screen-scroll">
 
     <content>
-        <VBox spacing="14" styleClass="surface-card detail-sheet">
+        <VBox spacing="20" styleClass="surface-card detail-sheet">
             <padding>
-                <Insets top="24" right="24" bottom="24" left="24"/>
+                <Insets top="40" right="40" bottom="40" left="40"/>
             </padding>
 
             <HBox alignment="CENTER_LEFT" spacing="14" styleClass="hero-strip">
@@ -34,6 +34,7 @@
                           editable="false"
                           wrapText="true"
                           prefRowCount="6"
+                          prefColumnCount="20"
                           styleClass="detail-area"/>
             </VBox>
 
@@ -43,6 +44,7 @@
                           editable="false"
                           wrapText="true"
                           prefRowCount="6"
+                          prefColumnCount="20"
                           styleClass="detail-area"/>
             </VBox>
 
@@ -52,6 +54,7 @@
                           editable="false"
                           wrapText="true"
                           prefRowCount="6"
+                          prefColumnCount="20"
                           styleClass="detail-area"/>
             </VBox>
 
@@ -61,6 +64,7 @@
                           editable="false"
                           wrapText="true"
                           prefRowCount="6"
+                          prefColumnCount="20"
                           styleClass="detail-area"/>
             </VBox>
 

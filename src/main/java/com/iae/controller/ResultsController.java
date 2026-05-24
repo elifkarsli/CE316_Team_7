@@ -15,17 +15,22 @@ import com.iae.service.ReportService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -48,6 +53,7 @@ public class ResultsController {
     private final ProjectService projectService = new ProjectService();
     private final ReportService reportService = new ReportService();
     private final ConfigurationService configurationService = new ConfigurationService();
+    private String selectedStudentId;
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
@@ -80,6 +86,7 @@ public class ResultsController {
         detailCol.setSortable(false);
         detailCol.setCellFactory(column -> new TableCell<>() {
             private final Button detailsButton = new Button("Details");
+            private final StackPane wrapper = new StackPane(detailsButton);
 
             {
                 detailsButton.getStyleClass().addAll("secondary-button", "compact-button");
@@ -89,12 +96,20 @@ public class ResultsController {
                         openDetailView(result);
                     }
                 });
+                detailsButton.setMinWidth(78);
+                detailsButton.setPrefWidth(78);
+                detailsButton.setMaxWidth(Double.MAX_VALUE);
+                wrapper.setPadding(new Insets(4, 0, 4, 0));
+                wrapper.setMaxWidth(Double.MAX_VALUE);
+                StackPane.setAlignment(detailsButton, Pos.CENTER);
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                setAlignment(Pos.CENTER);
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : detailsButton);
+                setGraphic(empty ? null : wrapper);
             }
         });
 
@@ -102,26 +117,26 @@ public class ResultsController {
             @Override
             protected void updateItem(StudentResult item, boolean empty) {
                 super.updateItem(item, empty);
+                setStyle("");
                 if (item == null || empty) {
-                    setStyle("");
-                    getStyleClass().removeAll("result-pass", "result-fail", "result-warn");
                     return;
-                }
-
-                getStyleClass().removeAll("result-pass", "result-fail", "result-warn");
-
-                if ("PASS".equals(item.getComparisonResult())) {
-                    getStyleClass().add("result-pass");
-                } else if ("FAIL".equals(item.getComparisonResult())) {
-                    getStyleClass().add("result-fail");
-                } else if ("COMPILE_ERROR".equals(item.getCompileStatus())
-                        || "RUNTIME_ERROR".equals(item.getRunStatus())
-                        || "NOT_COMPARED".equals(item.getComparisonResult())
-                        || "NO_EXPECTED_OUTPUT".equals(item.getComparisonResult())) {
-                    getStyleClass().add("result-warn");
                 }
             }
         });
+        resultTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+            selectedStudentId = newValue == null ? null : newValue.getStudentId();
+        });
+        resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        resultTable.setStyle(
+                "-fx-base: #0f1513;"
+                        + "-fx-control-inner-background: #0f1513;"
+                        + "-fx-control-inner-background-alt: #111916;"
+                        + "-fx-background-color: #0f1513;"
+                        + "-fx-table-cell-border-color: rgba(255, 255, 255, 0.06);"
+                        + "-fx-selection-bar: #244639;"
+                        + "-fx-selection-bar-non-focused: #1d332a;"
+                        + "-fx-focus-color: #4a8e73;"
+                        + "-fx-faint-focus-color: transparent;");
 
         viewDetailsButton.disableProperty().bind(
                 resultTable.getSelectionModel().selectedItemProperty().isNull());
@@ -136,6 +151,22 @@ public class ResultsController {
             List<StudentResult> results = reportService.getResultsByProject(project.getId());
             resultTable.setItems(FXCollections.observableArrayList(results));
             updateSummary(results);
+            if (!results.isEmpty()) {
+                StudentResult match = null;
+                if (selectedStudentId != null) {
+                    match = results.stream()
+                            .filter(result -> selectedStudentId.equals(result.getStudentId()))
+                            .findFirst()
+                            .orElse(null);
+                }
+                if (match != null) {
+                    resultTable.getSelectionModel().select(match);
+                } else {
+                    resultTable.getSelectionModel().selectFirst();
+                }
+            } else {
+                resultTable.getSelectionModel().clearSelection();
+            }
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Load Error",
                     "Could not load results: " + e.getMessage());
@@ -214,7 +245,11 @@ public class ResultsController {
                 detailStage.initOwner(resultTable.getScene().getWindow());
             }
             detailStage.setTitle("Result Detail - " + selected.getStudentId());
-            detailStage.setScene(new Scene(view, 920, 780));
+            Scene scene = new Scene(view, 920, 780);
+            scene.getStylesheets().add(
+                    getClass().getResource("/css/styles.css").toExternalForm());
+            scene.setFill(Color.web("#08100e"));
+            detailStage.setScene(scene);
             detailStage.showAndWait();
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Detail Error",
@@ -256,8 +291,8 @@ public class ResultsController {
                 .filter(r -> "PASS".equals(r.getComparisonResult()))
                 .count();
         summaryLabel.setText(
-                results.size() + " submissions  •  "
-                        + passCount + " passed  •  "
+                results.size() + " submissions | "
+                        + passCount + " passed | "
                         + (results.size() - passCount) + " need attention");
     }
 

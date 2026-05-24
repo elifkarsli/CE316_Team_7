@@ -10,59 +10,95 @@
 
     <top>
         <VBox>
-            <HBox styleClass="hero-banner">
-                <VBox spacing="3" HBox.hgrow="ALWAYS">
-                    <Label text="IAE" styleClass="brand-kicker"/>
-                    <Label text="Integrated Assignment Environment" styleClass="brand-title"/>
-                    <Label text="A calmer workspace for project setup, batch runs, and result review."
-                           styleClass="brand-subtitle" wrapText="true"/>
-                </VBox>
-                <Label text="Team 7" styleClass="brand-chip"/>
-            </HBox>
+            <VBox styleClass="hero-banner" spacing="3">
+                <Label text="IAE" styleClass="brand-kicker"/>
+                <Label text="Integrated Assignment Environment" styleClass="brand-title"/>
+                <Label text="A calmer workspace for project setup, batch runs, and result review."
+                       styleClass="brand-subtitle" wrapText="true"/>
+            </VBox>
 
-            <MenuBar fx:id="menuBar" styleClass="app-menu-bar">
-                <Menu text="File">
-                    <MenuItem text="New Project..." onAction="#handleNewProject"/>
-                    <MenuItem text="Open Project..." onAction="#handleOpenProject"/>
-                </Menu>
-                <Menu text="Configurations">
-                    <MenuItem text="Manage Configurations..." onAction="#handleManageConfigs"/>
-                </Menu>
-                <Menu text="Help">
-                    <MenuItem text="User Manual" onAction="#handleHelp"/>
-                </Menu>
-                <Menu text="Exit">
-                    <MenuItem text="Exit" onAction="#handleExit"/>
-                </Menu>
-            </MenuBar>
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="app-menu-strip">
+                <MenuBar fx:id="menuBar" styleClass="app-menu-bar">
+                    <Menu text="File">
+                        <MenuItem text="New Project..." onAction="#handleNewProject"/>
+                        <MenuItem text="Open Project..." onAction="#handleOpenProject"/>
+                    </Menu>
+                    <Menu text="Configurations">
+                        <MenuItem text="Manage Configurations..." onAction="#handleManageConfigs"/>
+                    </Menu>
+                    <Menu text="Help">
+                        <MenuItem text="User Manual" onAction="#handleHelp"/>
+                    </Menu>
+                </MenuBar>
+                <Label text="Exit" onMouseClicked="#handleExitClick" styleClass="menu-exit-link"/>
+            </HBox>
         </VBox>
     </top>
 
     <left>
-        <VBox styleClass="sidebar-panel" prefWidth="290" spacing="12">
-            <Label text="Workspace" styleClass="sidebar-kicker"/>
-            <Label text="Saved Projects" styleClass="sidebar-title"/>
-            <Label text="Double-click a project to reopen it instantly."
-                   styleClass="sidebar-hint" wrapText="true"/>
-            <ListView fx:id="projectListView" styleClass="project-list" VBox.vgrow="ALWAYS"/>
+        <VBox styleClass="sidebar-shell" prefWidth="320" spacing="12">
+            <VBox styleClass="sidebar-panel" spacing="12">
+                <Label text="Workspace" styleClass="sidebar-kicker"/>
+                <Label text="Saved Projects" styleClass="sidebar-title"/>
+                <Label text="Double-click a project to reopen it instantly."
+                       styleClass="sidebar-hint" wrapText="true"/>
+                <ScrollPane fx:id="projectScrollPane"
+                            fitToWidth="true"
+                            hbarPolicy="NEVER"
+                            vbarPolicy="AS_NEEDED"
+                            styleClass="project-scroll"
+                            VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox fx:id="projectListContainer"
+                              styleClass="project-list-container"
+                              spacing="12"
+                              fillWidth="true"/>
+                    </content>
+                </ScrollPane>
+            </VBox>
         </VBox>
     </left>
 
     <center>
         <StackPane fx:id="contentArea" styleClass="content-stage">
-            <VBox fx:id="welcomePane" styleClass="welcome-card" spacing="14" maxWidth="640">
-                <Label text="Welcome to your grading studio"
-                       styleClass="welcome-title" wrapText="true"/>
-                <Label fx:id="welcomeLabel"
-                       text="Create or open a project to begin."
-                       styleClass="welcome-body" wrapText="true"/>
-                <HBox spacing="10" styleClass="welcome-pill-row">
-                    <Label text="New project" styleClass="pill pill-blue"/>
-                    <Label text="Configurations" styleClass="pill pill-gold"/>
-                    <Label text="Help manual" styleClass="pill pill-teal"/>
-                </HBox>
-                <Label text="Tip: use the left rail to switch between saved projects without leaving the screen."
-                       styleClass="welcome-tip" wrapText="true"/>
+            <VBox fx:id="welcomePane" styleClass="welcome-card" spacing="20" maxWidth="820">
+                <VBox styleClass="welcome-copy" spacing="16">
+                    <Label text="WORKSPACE OVERVIEW" styleClass="welcome-kicker"/>
+                    <Label text="Welcome to your grading studio"
+                           styleClass="welcome-title" wrapText="true"/>
+                    <Label fx:id="welcomeLabel"
+                           text="Create or open a project to begin."
+                           styleClass="welcome-body" wrapText="true"/>
+                    <Label text="Local-first   ·   Batch runs   ·   Detail logs"
+                           styleClass="welcome-meta-line" wrapText="true"/>
+                    <VBox spacing="8" styleClass="welcome-callout">
+                        <Label text="Why this feels different" styleClass="welcome-callout-title"/>
+                        <Label text="Keep setup, evaluation, and result review inside one focused workspace instead of bouncing between separate screens."
+                               styleClass="welcome-callout-text" wrapText="true"/>
+                    </VBox>
+                    <HBox spacing="12" styleClass="welcome-stat-strip">
+                        <VBox spacing="6" styleClass="welcome-stat-card" HBox.hgrow="ALWAYS">
+                            <Label text="Open" styleClass="welcome-stat-index"/>
+                            <Label text="Choose a project" styleClass="welcome-stat-title" wrapText="true"/>
+                            <Label text="Open an existing .iaedb file or start a new one from the menu."
+                                   styleClass="welcome-stat-text" wrapText="true"/>
+                        </VBox>
+                        <VBox spacing="6" styleClass="welcome-stat-card" HBox.hgrow="ALWAYS">
+                            <Label text="Run" styleClass="welcome-stat-index"/>
+                            <Label text="Launch the batch" styleClass="welcome-stat-title" wrapText="true"/>
+                            <Label text="Compile and execute each submission with one click."
+                                   styleClass="welcome-stat-text" wrapText="true"/>
+                        </VBox>
+                        <VBox spacing="6" styleClass="welcome-stat-card" HBox.hgrow="ALWAYS">
+                            <Label text="Review" styleClass="welcome-stat-index"/>
+                            <Label text="Read the details" styleClass="welcome-stat-title" wrapText="true"/>
+                            <Label text="Open the row popup to inspect logs, output, and errors."
+                                   styleClass="welcome-stat-text" wrapText="true"/>
+                        </VBox>
+                    </HBox>
+                    <Label text="Tip: use the left rail to switch between saved projects without leaving the screen."
+                           styleClass="welcome-tip" wrapText="true"/>
+                </VBox>
             </VBox>
         </StackPane>
     </center>

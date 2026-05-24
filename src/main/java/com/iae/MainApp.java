@@ -1,9 +1,12 @@
 package com.iae;
 
 import com.iae.dao.DatabaseManager;
+import javafx.geometry.Rectangle2D;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.nio.file.Files;
@@ -23,13 +26,18 @@ public class MainApp extends Application {
         DatabaseManager.getInstance().connect(mainDb.toAbsolutePath().toString());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
-        Scene scene = new Scene(loader.load(), 1280, 840);
+        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+        double sceneWidth = Math.min(1280, Math.max(1120, visualBounds.getWidth() - 80));
+        double sceneHeight = Math.min(760, Math.max(680, visualBounds.getHeight() - 100));
+        Scene scene = new Scene(loader.load(), sceneWidth, sceneHeight);
         scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        primaryStage.setTitle("IAE – Integrated Assignment Environment");
+        scene.setFill(Color.web("#08100e"));
+        primaryStage.setTitle("IAE - Integrated Assignment Environment");
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(1100);
-        primaryStage.setMinHeight(720);
+        primaryStage.setMinHeight(650);
         primaryStage.show();
+        primaryStage.centerOnScreen();
         primaryStage.setOnCloseRequest(event -> {
             try {
                 DatabaseManager.getInstance().disconnect();

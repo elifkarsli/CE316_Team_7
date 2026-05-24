@@ -148,12 +148,22 @@ public class ProjectService {
     public void runProject(Project project) throws Exception {
         Configuration config = configService.findById(project.getConfigurationId())
                 .orElseThrow(() -> new Exception("Configuration not found: " + project.getConfigurationId()));
-        reportService.clearResults(project.getId());
+
+        Path submissionsDir = Paths.get(project.getSubmissionsDirectory());
+        if (!Files.isDirectory(submissionsDir)) {
+            throw new Exception("Submissions directory not found: " + submissionsDir);
+        }
 
         List<Path> studentDirs = zipHandler.extractAll(
-                Paths.get(project.getSubmissionsDirectory()),
+                submissionsDir,
                 Paths.get(System.getProperty("java.io.tmpdir"), "iae")
         );
+
+        if (studentDirs.isEmpty()) {
+            throw new Exception("No ZIP submissions found in: " + submissionsDir);
+        }
+
+        reportService.clearResults(project.getId());
 
         for (Path studentDir : studentDirs) {
             String studentId = studentDir.getFileName().toString();

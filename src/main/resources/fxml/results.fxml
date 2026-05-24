@@ -10,7 +10,7 @@
             styleClass="screen-shell">
 
     <top>
-        <VBox spacing="12" styleClass="screen-header-wrap">
+        <VBox spacing="20" styleClass="screen-header-wrap">
             <HBox styleClass="surface-card hero-strip" spacing="18">
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
                     <Label fx:id="projectTitleLabel"
@@ -26,7 +26,7 @@
                        wrapText="true"/>
             </HBox>
 
-            <HBox styleClass="surface-card toolbar-card" spacing="12" alignment="CENTER_LEFT">
+            <HBox styleClass="surface-card toolbar-card" spacing="14" alignment="CENTER_LEFT">
                 <Button fx:id="runButton"
                         text="Run Project"
                         onAction="#handleRun"
@@ -48,7 +48,7 @@
                    BorderPane.alignment="CENTER"
                    styleClass="data-table results-table">
             <BorderPane.margin>
-                <Insets top="0" right="16" bottom="16" left="16"/>
+                <Insets top="12" right="18" bottom="18" left="18"/>
             </BorderPane.margin>
             <placeholder>
                 <Label text="No results yet. Click Run Project to evaluate submissions."
@@ -57,16 +57,16 @@
             <columns>
                 <TableColumn fx:id="colStudentId"
                              text="Student ID"
-                             minWidth="140" prefWidth="180"/>
+                             minWidth="150" prefWidth="170"/>
                 <TableColumn fx:id="colCompileStatus"
                              text="Compile Status"
-                             minWidth="120" prefWidth="150"/>
+                             minWidth="130" prefWidth="150"/>
                 <TableColumn fx:id="colRunStatus"
                              text="Run Status"
-                             minWidth="120" prefWidth="140"/>
+                             minWidth="130" prefWidth="150"/>
                 <TableColumn fx:id="colComparison"
                              text="Output Result"
-                             minWidth="120" prefWidth="140"/>
+                             minWidth="140" prefWidth="170"/>
                 <TableColumn fx:id="colOverall"
                              text="Overall"
                              minWidth="90" prefWidth="100"/>
