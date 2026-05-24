@@ -1,46 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane xmlns="http://javafx.com/javafx/17.0.6"
+<ScrollPane prefWidth="920.0" prefHeight="780.0"
+            xmlns="http://javafx.com/javafx/17.0.6"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.iae.controller.ResultDetailController"
             fitToWidth="true"
-            style="-fx-background-color:#F7F9FC;">
+            styleClass="screen-scroll">
 
     <content>
-        <VBox spacing="12" style="-fx-padding:20; -fx-background-color:#F7F9FC;">
-            <Label fx:id="studentLabel"
-                   text="Student:"
-                   style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
+        <VBox spacing="14" styleClass="surface-card detail-sheet">
+            <padding>
+                <Insets top="24" right="24" bottom="24" left="24"/>
+            </padding>
 
-            <Label text="Compile Log" style="-fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
-            <TextArea fx:id="compileLogArea"
-                      editable="false"
-                      wrapText="true"
-                      prefRowCount="6"/>
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="hero-strip">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label fx:id="studentLabel"
+                           text="Student:"
+                           styleClass="page-title"/>
+                    <Label text="This view keeps the full run log, expected output, and error details together."
+                           styleClass="page-subtitle" wrapText="true"/>
+                </VBox>
+                <Label text="DETAILS" styleClass="section-badge"/>
+            </HBox>
 
-            <Label text="Run Output" style="-fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
-            <TextArea fx:id="runOutputArea"
-                      editable="false"
-                      wrapText="true"
-                      prefRowCount="6"/>
+            <VBox spacing="8">
+                <Label text="Compile Log" styleClass="detail-section-title"/>
+                <TextArea fx:id="compileLogArea"
+                          editable="false"
+                          wrapText="true"
+                          prefRowCount="6"
+                          styleClass="detail-area"/>
+            </VBox>
 
-            <Label text="Expected Output" style="-fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
-            <TextArea fx:id="expectedOutputArea"
-                      editable="false"
-                      wrapText="true"
-                      prefRowCount="6"/>
+            <VBox spacing="8">
+                <Label text="Run Output" styleClass="detail-section-title"/>
+                <TextArea fx:id="runOutputArea"
+                          editable="false"
+                          wrapText="true"
+                          prefRowCount="6"
+                          styleClass="detail-area"/>
+            </VBox>
 
-            <Label text="Error Details" style="-fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
-            <TextArea fx:id="errorDetailsArea"
-                      editable="false"
-                      wrapText="true"
-                      prefRowCount="6"/>
+            <VBox spacing="8">
+                <Label text="Expected Output" styleClass="detail-section-title"/>
+                <TextArea fx:id="expectedOutputArea"
+                          editable="false"
+                          wrapText="true"
+                          prefRowCount="6"
+                          styleClass="detail-area"/>
+            </VBox>
+
+            <VBox spacing="8">
+                <Label text="Error Details" styleClass="detail-section-title"/>
+                <TextArea fx:id="errorDetailsArea"
+                          editable="false"
+                          wrapText="true"
+                          prefRowCount="6"
+                          styleClass="detail-area"/>
+            </VBox>
 
             <HBox alignment="CENTER_RIGHT">
-                <Button text="Close" onAction="#handleClose"/>
+                <Button text="Close" onAction="#handleClose" styleClass="secondary-button"/>
             </HBox>
         </VBox>
     </content>

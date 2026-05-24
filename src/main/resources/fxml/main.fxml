@@ -5,44 +5,70 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.6"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.iae.controller.MainController">
+            fx:controller="com.iae.controller.MainController"
+            styleClass="app-shell">
 
     <top>
-        <MenuBar fx:id="menuBar" styleClass="menu-bar">
-            <Menu text="File">
-                <MenuItem text="New Project..."      onAction="#handleNewProject"/>
-                <MenuItem text="Open Project..."     onAction="#handleOpenProject"/>
-            </Menu>
-            <Menu text="Configurations">
-                <MenuItem text="Manage Configurations..." onAction="#handleManageConfigs"/>
-            </Menu>
-            <Menu text="Help">
-                <MenuItem text="User Manual" onAction="#handleHelp"/>
-            </Menu>
-            <Menu text="Exit">
-                <MenuItem text="Exit" onAction="#handleExit"/>
-            </Menu>
-        </MenuBar>
+        <VBox>
+            <HBox styleClass="hero-banner">
+                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                    <Label text="IAE" styleClass="brand-kicker"/>
+                    <Label text="Integrated Assignment Environment" styleClass="brand-title"/>
+                    <Label text="A calmer workspace for project setup, batch runs, and result review."
+                           styleClass="brand-subtitle" wrapText="true"/>
+                </VBox>
+                <Label text="Team 7" styleClass="brand-chip"/>
+            </HBox>
+
+            <MenuBar fx:id="menuBar" styleClass="app-menu-bar">
+                <Menu text="File">
+                    <MenuItem text="New Project..." onAction="#handleNewProject"/>
+                    <MenuItem text="Open Project..." onAction="#handleOpenProject"/>
+                </Menu>
+                <Menu text="Configurations">
+                    <MenuItem text="Manage Configurations..." onAction="#handleManageConfigs"/>
+                </Menu>
+                <Menu text="Help">
+                    <MenuItem text="User Manual" onAction="#handleHelp"/>
+                </Menu>
+                <Menu text="Exit">
+                    <MenuItem text="Exit" onAction="#handleExit"/>
+                </Menu>
+            </MenuBar>
+        </VBox>
     </top>
 
     <left>
-        <VBox style="-fx-padding:10; -fx-min-width:200; -fx-background-color:#F0F4F8; -fx-spacing:8;">
-            <Label text="Projects" style="-fx-font-weight:bold; -fx-font-size:14;"/>
-            <ListView fx:id="projectListView" VBox.vgrow="ALWAYS"/>
+        <VBox styleClass="sidebar-panel" prefWidth="290" spacing="12">
+            <Label text="Workspace" styleClass="sidebar-kicker"/>
+            <Label text="Saved Projects" styleClass="sidebar-title"/>
+            <Label text="Double-click a project to reopen it instantly."
+                   styleClass="sidebar-hint" wrapText="true"/>
+            <ListView fx:id="projectListView" styleClass="project-list" VBox.vgrow="ALWAYS"/>
         </VBox>
     </left>
 
     <center>
-        <StackPane fx:id="contentArea" style="-fx-padding:20;">
-            <Label fx:id="welcomeLabel"
-                   text="Welcome! Create or open a project to begin."
-                   style="-fx-font-size:16; -fx-text-fill:#888888;"/>
+        <StackPane fx:id="contentArea" styleClass="content-stage">
+            <VBox fx:id="welcomePane" styleClass="welcome-card" spacing="14" maxWidth="640">
+                <Label text="Welcome to your grading studio"
+                       styleClass="welcome-title" wrapText="true"/>
+                <Label fx:id="welcomeLabel"
+                       text="Create or open a project to begin."
+                       styleClass="welcome-body" wrapText="true"/>
+                <HBox spacing="10" styleClass="welcome-pill-row">
+                    <Label text="New project" styleClass="pill pill-blue"/>
+                    <Label text="Configurations" styleClass="pill pill-gold"/>
+                    <Label text="Help manual" styleClass="pill pill-teal"/>
+                </HBox>
+                <Label text="Tip: use the left rail to switch between saved projects without leaving the screen."
+                       styleClass="welcome-tip" wrapText="true"/>
+            </VBox>
         </StackPane>
     </center>
 
     <bottom>
-        <Label fx:id="statusBar" text="Ready"
-               style="-fx-padding:4 10; -fx-background-color:#E8E8E8; -fx-font-size:12px; -fx-text-fill:#555555;"/>
+        <Label fx:id="statusBar" text="Ready" styleClass="status-bar"/>
     </bottom>
 
 </BorderPane>

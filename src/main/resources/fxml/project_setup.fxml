@@ -1,54 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/17.0.6"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.iae.controller.ProjectSetupController"
-      spacing="16">
+<ScrollPane prefWidth="900.0" prefHeight="740.0" fitToWidth="true"
+            xmlns="http://javafx.com/javafx/17.0.6"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.iae.controller.ProjectSetupController"
+            styleClass="screen-scroll">
+    <content>
+        <StackPane styleClass="content-stage">
+            <VBox spacing="18.0" styleClass="surface-card form-card" maxWidth="820">
+                <padding>
+                    <Insets top="26.0" right="28.0" bottom="26.0" left="28.0"/>
+                </padding>
 
-    <padding>
-        <Insets top="30" right="40" bottom="30" left="40"/>
-    </padding>
+                <HBox alignment="CENTER_LEFT" spacing="16" styleClass="hero-strip">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Create New Project" styleClass="page-title"/>
+                        <Label text="Point this at a configuration and a folder of student ZIP files."
+                               styleClass="page-subtitle" wrapText="true"/>
+                    </VBox>
+                    <Label text="01" styleClass="section-badge"/>
+                </HBox>
 
-    <Label text="Create New Project"
-           style="-fx-font-size:22; -fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
+                <GridPane hgap="14.0" vgap="14.0" styleClass="form-grid">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" minWidth="150.0" prefWidth="170.0"/>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="320.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="40.0"/>
+                        <RowConstraints minHeight="40.0"/>
+                        <RowConstraints minHeight="40.0"/>
+                    </rowConstraints>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Project Name:" minWidth="160"/>
-        <TextField fx:id="nameField" prefWidth="320"
-                   promptText="e.g. Assignment 1 – C Programs"/>
-    </HBox>
+                    <Label text="Project Name:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <TextField fx:id="nameField" prefWidth="360"
+                               promptText="e.g. Assignment 1 - C Programs"
+                               GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Configuration:" minWidth="160"/>
-        <ComboBox fx:id="configCombo" prefWidth="320"
-                  promptText="Select a configuration…"/>
-    </HBox>
+                    <Label text="Configuration:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <ComboBox fx:id="configCombo" prefWidth="360"
+                              promptText="Select a configuration..."
+                              GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Submissions Folder:" minWidth="160"/>
-        <TextField fx:id="dirField" prefWidth="260"
-                   promptText="Path to student ZIP files…"
-                   editable="false"/>
-        <Button text="Browse…" onAction="#handleBrowse"/>
-    </HBox>
+                    <Label text="Submissions Folder:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <TextField fx:id="dirField" prefWidth="280"
+                                   promptText="Path to student ZIP files..."
+                                   editable="false"
+                                   HBox.hgrow="ALWAYS"/>
+                        <Button text="Browse..." onAction="#handleBrowse" styleClass="secondary-button"/>
+                    </HBox>
+                </GridPane>
 
-    <Label fx:id="messageLabel"
-           managed="false"
-           visible="false"
-           wrapText="true"
-           style="-fx-text-fill:#b00020; -fx-font-size:12px;"/>
+                <Label fx:id="messageLabel"
+                       managed="false"
+                       visible="false"
+                       wrapText="true"
+                       styleClass="form-message"/>
 
-    <HBox spacing="12" alignment="CENTER_LEFT">
-        <Button text="Create Project"
-                onAction="#handleCreate"
-                style="-fx-background-color:#1F3864; -fx-text-fill:white;
-                       -fx-font-size:14; -fx-padding:8 20;
-                       -fx-background-radius:4;"/>
-        <Button text="Cancel" onAction="#handleCancel"/>
-    </HBox>
-
-</VBox>
+                <HBox spacing="12" alignment="CENTER_RIGHT">
+                    <Button text="Cancel" onAction="#handleCancel" styleClass="ghost-button"/>
+                    <Button text="Create Project"
+                            onAction="#handleCreate"
+                            styleClass="primary-button"/>
+                </HBox>
+            </VBox>
+        </StackPane>
+    </content>
+</ScrollPane>

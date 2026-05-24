@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -28,6 +29,7 @@ public class MainController {
     @FXML private ListView<ProjectService.SavedProjectInfo> projectListView;
     @FXML private Label        statusBar;
     @FXML private Label        welcomeLabel;
+    @FXML private VBox         welcomePane;
     @FXML private MenuBar      menuBar;
 
     private final ProjectService projectService = new ProjectService();
@@ -36,10 +38,34 @@ public class MainController {
     private void initialize() {
         statusBar.setText("Ready");
         projectListView.setCellFactory(list -> new ListCell<>() {
+            private final VBox cellBox = new VBox(2);
+            private final Label titleLabel = new Label();
+            private final Label subtitleLabel = new Label();
+
+            {
+                titleLabel.getStyleClass().add("project-cell-title");
+                subtitleLabel.getStyleClass().add("project-cell-subtitle");
+                subtitleLabel.setWrapText(true);
+                titleLabel.setMaxWidth(Double.MAX_VALUE);
+                subtitleLabel.setMaxWidth(Double.MAX_VALUE);
+                cellBox.setMaxWidth(Double.MAX_VALUE);
+                cellBox.getChildren().addAll(titleLabel, subtitleLabel);
+                cellBox.getStyleClass().add("project-cell");
+            }
+
             @Override
             protected void updateItem(ProjectService.SavedProjectInfo item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty || item == null ? null : formatDisplayLabel(item));
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                    return;
+                }
+
+                titleLabel.setText(item.name());
+                subtitleLabel.setText(item.dbFile().getFileName().toString());
+                setGraphic(cellBox);
+                setText(null);
             }
         });
 
@@ -179,7 +205,11 @@ public class MainController {
 
     public void showWelcome() {
         contentArea.getChildren().clear();
-        contentArea.getChildren().add(welcomeLabel);
+        if (welcomePane != null) {
+            contentArea.getChildren().add(welcomePane);
+        } else {
+            contentArea.getChildren().add(welcomeLabel);
+        }
         statusBar.setText("Ready");
     }
 

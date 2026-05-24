@@ -23,12 +23,12 @@ public class MainApp extends Application {
         DatabaseManager.getInstance().connect(mainDb.toAbsolutePath().toString());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
-        Scene scene = new Scene(loader.load(), 1100, 700);
+        Scene scene = new Scene(loader.load(), 1280, 840);
         scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         primaryStage.setTitle("IAE – Integrated Assignment Environment");
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(900);
-        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(1100);
+        primaryStage.setMinHeight(720);
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
             try {

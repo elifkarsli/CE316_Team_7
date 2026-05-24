@@ -82,6 +82,7 @@ public class ResultsController {
             private final Button detailsButton = new Button("Details");
 
             {
+                detailsButton.getStyleClass().addAll("secondary-button", "compact-button");
                 detailsButton.setOnAction(event -> {
                     StudentResult result = getTableView().getItems().get(getIndex());
                     if (result != null) {
@@ -103,20 +104,21 @@ public class ResultsController {
                 super.updateItem(item, empty);
                 if (item == null || empty) {
                     setStyle("");
+                    getStyleClass().removeAll("result-pass", "result-fail", "result-warn");
                     return;
                 }
 
+                getStyleClass().removeAll("result-pass", "result-fail", "result-warn");
+
                 if ("PASS".equals(item.getComparisonResult())) {
-                    setStyle("-fx-background-color: #D4EDDA;");
+                    getStyleClass().add("result-pass");
                 } else if ("FAIL".equals(item.getComparisonResult())) {
-                    setStyle("-fx-background-color: #F8D7DA;");
+                    getStyleClass().add("result-fail");
                 } else if ("COMPILE_ERROR".equals(item.getCompileStatus())
                         || "RUNTIME_ERROR".equals(item.getRunStatus())
                         || "NOT_COMPARED".equals(item.getComparisonResult())
                         || "NO_EXPECTED_OUTPUT".equals(item.getComparisonResult())) {
-                    setStyle("-fx-background-color: #FFF3CD;");
-                } else {
-                    setStyle("");
+                    getStyleClass().add("result-warn");
                 }
             }
         });
@@ -212,7 +214,7 @@ public class ResultsController {
                 detailStage.initOwner(resultTable.getScene().getWindow());
             }
             detailStage.setTitle("Result Detail - " + selected.getStudentId());
-            detailStage.setScene(new Scene(view, 800, 700));
+            detailStage.setScene(new Scene(view, 920, 780));
             detailStage.showAndWait();
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Detail Error",
@@ -254,9 +256,9 @@ public class ResultsController {
                 .filter(r -> "PASS".equals(r.getComparisonResult()))
                 .count();
         summaryLabel.setText(
-                results.size() + " submissions  |  "
-                        + passCount + " passed  |  "
-                        + (results.size() - passCount) + " failed");
+                results.size() + " submissions  •  "
+                        + passCount + " passed  •  "
+                        + (results.size() - passCount) + " need attention");
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
