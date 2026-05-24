@@ -16,7 +16,6 @@ public class OutputComparator {
                     ? ComparisonResult.PASS
                     : ComparisonResult.FAIL;
         } catch (IOException e) {
-            System.err.println("Could not read expected output file: " + e.getMessage());
             return ComparisonResult.FAIL;
         }
     }

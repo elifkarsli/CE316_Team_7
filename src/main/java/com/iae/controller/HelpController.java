@@ -1,5 +1,6 @@
 package com.iae.controller;
 
+import com.iae.ui.UiTheme;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.web.WebEngine;
@@ -38,6 +39,7 @@ public class HelpController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Help Error");
         alert.setHeaderText(message);
+        UiTheme.styleAlert(alert);
         alert.showAndWait();
     }
 }

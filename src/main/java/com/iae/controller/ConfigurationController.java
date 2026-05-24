@@ -2,6 +2,7 @@ package com.iae.controller;
 
 import com.iae.model.Configuration;
 import com.iae.service.ConfigurationService;
+import com.iae.ui.UiTheme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -76,7 +77,8 @@ public class ConfigurationController {
         typeColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().isInterpreted() ? "Interpreted" : "Compiled"));
 
-        configurationTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        configurationTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        UiTheme.styleDataTable(configurationTable);
         configurationTable.setItems(configurations);
 
         editButton.disableProperty().bind(Bindings.isNull(configurationTable.getSelectionModel().selectedItemProperty()));
@@ -110,6 +112,7 @@ public class ConfigurationController {
         confirmation.setTitle("Delete Configuration");
         confirmation.setHeaderText("Delete selected configuration?");
         confirmation.setContentText(selectedConfiguration.getName());
+        UiTheme.styleAlert(confirmation);
 
         Optional<ButtonType> result = confirmation.showAndWait();
         if (result.isEmpty() || result.get() != ButtonType.OK) {
@@ -194,7 +197,9 @@ public class ConfigurationController {
             dialog.setTitle("IAE Help");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(getWindow());
-            dialog.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            UiTheme.apply(scene);
+            dialog.setScene(scene);
             dialog.show();
         } catch (IOException exception) {
             showError("Help screen could not be opened.", exception);
@@ -234,7 +239,9 @@ public class ConfigurationController {
             dialog.setTitle(configuration == null ? "New Configuration" : "Edit Configuration");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(getWindow());
-            dialog.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            UiTheme.apply(scene);
+            dialog.setScene(scene);
             controller.setDialogStage(dialog);
             dialog.showAndWait();
 
@@ -271,6 +278,7 @@ public class ConfigurationController {
         alert.setTitle("Configuration");
         alert.setHeaderText(null);
         alert.setContentText(message);
+        UiTheme.styleAlert(alert);
         alert.showAndWait();
     }
 
@@ -283,6 +291,7 @@ public class ConfigurationController {
         alert.setTitle("Configuration Error");
         alert.setHeaderText(message);
         alert.setContentText(exception == null ? null : exception.getMessage());
+        UiTheme.styleAlert(alert);
         alert.showAndWait();
     }
 }

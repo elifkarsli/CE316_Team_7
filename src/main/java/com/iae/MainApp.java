@@ -1,11 +1,11 @@
 package com.iae;
 
 import com.iae.dao.DatabaseManager;
+import com.iae.ui.UiTheme;
 import javafx.geometry.Rectangle2D;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -30,8 +30,7 @@ public class MainApp extends Application {
         double sceneWidth = Math.min(1280, Math.max(1120, visualBounds.getWidth() - 80));
         double sceneHeight = Math.min(760, Math.max(680, visualBounds.getHeight() - 100));
         Scene scene = new Scene(loader.load(), sceneWidth, sceneHeight);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        scene.setFill(Color.web("#08100e"));
+        UiTheme.apply(scene);
         primaryStage.setTitle("IAE - Integrated Assignment Environment");
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(1100);

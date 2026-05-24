@@ -13,11 +13,9 @@
             <VBox styleClass="hero-banner" spacing="3">
                 <Label text="IAE" styleClass="brand-kicker"/>
                 <Label text="Integrated Assignment Environment" styleClass="brand-title"/>
-                <Label text="A calmer workspace for project setup, batch runs, and result review."
-                       styleClass="brand-subtitle" wrapText="true"/>
             </VBox>
 
-            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="app-menu-strip">
+            <HBox alignment="CENTER_LEFT" spacing="0" styleClass="app-menu-strip">
                 <MenuBar fx:id="menuBar" styleClass="app-menu-bar">
                     <Menu text="File">
                         <MenuItem text="New Project..." onAction="#handleNewProject"/>

@@ -11,6 +11,7 @@ import com.iae.model.StudentResult;
 import com.iae.service.ConfigurationService;
 import com.iae.service.ProjectService;
 import com.iae.service.ReportService;
+import com.iae.ui.UiTheme;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -27,10 +28,8 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -113,30 +112,11 @@ public class ResultsController {
             }
         });
 
-        resultTable.setRowFactory(tv -> new TableRow<>() {
-            @Override
-            protected void updateItem(StudentResult item, boolean empty) {
-                super.updateItem(item, empty);
-                setStyle("");
-                if (item == null || empty) {
-                    return;
-                }
-            }
-        });
         resultTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             selectedStudentId = newValue == null ? null : newValue.getStudentId();
         });
-        resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        resultTable.setStyle(
-                "-fx-base: #0f1513;"
-                        + "-fx-control-inner-background: #0f1513;"
-                        + "-fx-control-inner-background-alt: #111916;"
-                        + "-fx-background-color: #0f1513;"
-                        + "-fx-table-cell-border-color: rgba(255, 255, 255, 0.06);"
-                        + "-fx-selection-bar: #244639;"
-                        + "-fx-selection-bar-non-focused: #1d332a;"
-                        + "-fx-focus-color: #4a8e73;"
-                        + "-fx-faint-focus-color: transparent;");
+        resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        UiTheme.styleDataTable(resultTable);
 
         viewDetailsButton.disableProperty().bind(
                 resultTable.getSelectionModel().selectedItemProperty().isNull());
@@ -246,9 +226,7 @@ public class ResultsController {
             }
             detailStage.setTitle("Result Detail - " + selected.getStudentId());
             Scene scene = new Scene(view, 920, 780);
-            scene.getStylesheets().add(
-                    getClass().getResource("/css/styles.css").toExternalForm());
-            scene.setFill(Color.web("#08100e"));
+            UiTheme.apply(scene);
             detailStage.setScene(scene);
             detailStage.showAndWait();
         } catch (Exception e) {
@@ -300,6 +278,7 @@ public class ResultsController {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(message);
+        UiTheme.styleAlert(alert);
         alert.showAndWait();
     }
 }

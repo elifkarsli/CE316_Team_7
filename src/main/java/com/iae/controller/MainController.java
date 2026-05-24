@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.iae.model.Project;
 import com.iae.service.ProjectService;
+import com.iae.ui.UiTheme;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -23,7 +24,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
@@ -73,13 +73,7 @@ public class MainController {
 
     private void openSavedProject(Path dbFile) {
         try {
-            Project project = projectService.openProject(dbFile);
-            ProjectService.SavedProjectInfo info = new ProjectService.SavedProjectInfo(project.getName(), dbFile);
-            addToSidebar(info);
-            selectedProjectPath = normalizePath(dbFile);
-            updateSidebarSelection();
-            loadResultsView(project);
-            statusBar.setText("Opened: " + project.getName());
+            openProjectFile(dbFile);
         } catch (Exception e) {
             showError("Open Error", "Could not open saved project: " + e.getMessage());
         }
@@ -120,13 +114,7 @@ public class MainController {
         if (file == null) return;
 
         try {
-            Project project = projectService.openProject(file.toPath());
-            ProjectService.SavedProjectInfo info = new ProjectService.SavedProjectInfo(project.getName(), file.toPath());
-            addToSidebar(info);
-            selectedProjectPath = normalizePath(file.toPath());
-            updateSidebarSelection();
-            loadResultsView(project);
-            statusBar.setText("Opened: " + project.getName());
+            openProjectFile(file.toPath());
         } catch (Exception e) {
             showError("Open Error", "Could not open project: " + e.getMessage());
         }
@@ -152,9 +140,7 @@ public class MainController {
             Parent view = FXMLLoader.load(
                     getClass().getResource("/fxml/help.fxml"));
             Scene scene = new Scene(view, 900, 650);
-            scene.getStylesheets().add(
-                    getClass().getResource("/css/styles.css").toExternalForm());
-            scene.setFill(Color.web("#08100e"));
+            UiTheme.apply(scene);
             helpStage.setScene(scene);
             helpStage.setTitle("IAE - User Manual");
             helpStage.show();
@@ -166,7 +152,6 @@ public class MainController {
     @FXML
     void handleExit() {
         Platform.exit();
-        Runtime.getRuntime().halt(0);
     }
 
     @FXML
@@ -218,6 +203,16 @@ public class MainController {
             savedProjects.add(projectInfo);
             renderSavedProjects();
         }
+    }
+
+    private void openProjectFile(Path dbFile) throws Exception {
+        Project project = projectService.openProject(dbFile);
+        ProjectService.SavedProjectInfo info = new ProjectService.SavedProjectInfo(project.getName(), dbFile);
+        addToSidebar(info);
+        selectedProjectPath = normalizePath(dbFile);
+        updateSidebarSelection();
+        loadResultsView(project);
+        statusBar.setText("Opened: " + project.getName());
     }
 
     private void renderSavedProjects() {
@@ -301,6 +296,7 @@ public class MainController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(message);
+        UiTheme.styleAlert(alert);
         alert.showAndWait();
     }
 }
