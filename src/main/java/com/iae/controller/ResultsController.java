@@ -1,9 +1,14 @@
 package com.iae.controller;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
+import com.iae.model.Configuration;
 import com.iae.model.Project;
 import com.iae.model.StudentResult;
+import com.iae.service.ConfigurationService;
 import com.iae.service.ProjectService;
 import com.iae.service.ReportService;
 
@@ -42,6 +47,7 @@ public class ResultsController {
     private MainController mainController;
     private final ProjectService projectService = new ProjectService();
     private final ReportService reportService = new ReportService();
+    private final ConfigurationService configurationService = new ConfigurationService();
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
@@ -102,10 +108,13 @@ public class ResultsController {
 
                 if ("PASS".equals(item.getComparisonResult())) {
                     setStyle("-fx-background-color: #D4EDDA;");
+                } else if ("FAIL".equals(item.getComparisonResult())) {
+                    setStyle("-fx-background-color: #F8D7DA;");
                 } else if ("COMPILE_ERROR".equals(item.getCompileStatus())
                         || "RUNTIME_ERROR".equals(item.getRunStatus())
-                        || "FAIL".equals(item.getComparisonResult())) {
-                    setStyle("-fx-background-color: #F8D7DA;");
+                        || "NOT_COMPARED".equals(item.getComparisonResult())
+                        || "NO_EXPECTED_OUTPUT".equals(item.getComparisonResult())) {
+                    setStyle("-fx-background-color: #FFF3CD;");
                 } else {
                     setStyle("");
                 }
@@ -195,7 +204,7 @@ public class ResultsController {
             Parent view = loader.load();
 
             ResultDetailController controller = loader.getController();
-            controller.setResult(selected);
+            controller.setResult(selected, loadExpectedOutputText());
 
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.APPLICATION_MODAL);
@@ -203,11 +212,40 @@ public class ResultsController {
                 detailStage.initOwner(resultTable.getScene().getWindow());
             }
             detailStage.setTitle("Result Detail - " + selected.getStudentId());
-            detailStage.setScene(new Scene(view, 700, 550));
+            detailStage.setScene(new Scene(view, 800, 700));
             detailStage.showAndWait();
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Detail Error",
                     "Could not open detail view: " + e.getMessage());
+        }
+    }
+
+    private String loadExpectedOutputText() {
+        if (project == null) {
+            return "No project selected.";
+        }
+
+        try {
+            Configuration configuration = configurationService
+                    .findById(project.getConfigurationId())
+                    .orElse(null);
+            if (configuration == null) {
+                return "Expected output configuration not found.";
+            }
+
+            String expectedOutputPathValue = configuration.getExpectedOutputPath();
+            if (expectedOutputPathValue == null || expectedOutputPathValue.isBlank()) {
+                return "No expected output configured for this project.";
+            }
+
+            Path expectedOutputPath = Paths.get(expectedOutputPathValue);
+            if (!Files.isRegularFile(expectedOutputPath)) {
+                return "Expected output file not found: " + expectedOutputPath;
+            }
+
+            return Files.readString(expectedOutputPath);
+        } catch (Exception e) {
+            return "Could not load expected output: " + e.getMessage();
         }
     }
 

@@ -165,8 +165,10 @@ public class ProjectService {
             if (!config.isInterpreted()) {
                 ProcessResult cr = executionEngine.compile(config, studentDir);
                 result.setCompileStatus(cr.isSuccess() ? "SUCCESS" : "COMPILE_ERROR");
-                result.setCompileLog(cr.getStdout() + cr.getStderr());
+                result.setCompileLog(resolveProcessLog("Compilation", cr));
                 if (!cr.isSuccess()) {
+                    result.setComparisonResult("NOT_COMPARED");
+                    result.setErrorDetails(buildFailureDetails("Compilation", cr));
                     reportService.saveResult(result);
                     continue;
                 }
@@ -179,7 +181,8 @@ public class ProjectService {
             result.setRunStatus(rr.isSuccess() ? "SUCCESS" : "RUNTIME_ERROR");
             result.setRunOutput(rr.getStdout());
             if (!rr.isSuccess()) {
-                result.setErrorDetails(rr.getStderr());
+                result.setComparisonResult("NOT_COMPARED");
+                result.setErrorDetails(buildFailureDetails("Runtime", rr));
                 reportService.saveResult(result);
                 continue;
             }
@@ -209,6 +212,54 @@ public class ProjectService {
         project.setLastRunDate(LocalDate.now().toString());
         projectDAO.update(project);
     }
+
+    private String resolveProcessLog(String stage, ProcessResult processResult) {
+        String stdout = safeText(processResult.getStdout());
+        String stderr = safeText(processResult.getStderr());
+        if (!stdout.isBlank() || !stderr.isBlank()) {
+            return stdout + stderr;
+        }
+        return stage + " failed with exit code " + processResult.getExitCode() + ".";
+    }
+
+    private String buildFailureDetails(String stage, ProcessResult processResult) {
+        String stdout = safeText(processResult.getStdout()).strip();
+        String stderr = safeText(processResult.getStderr()).strip();
+
+        StringBuilder message = new StringBuilder();
+        message.append(stage)
+                .append(" failed with exit code ")
+                .append(processResult.getExitCode())
+                .append('.');
+
+        if (!stdout.isBlank()) {
+            message.append(System.lineSeparator())
+                    .append(System.lineSeparator())
+                    .append("STDOUT:")
+                    .append(System.lineSeparator())
+                    .append(stdout);
+        }
+
+        if (!stderr.isBlank()) {
+            message.append(System.lineSeparator())
+                    .append(System.lineSeparator())
+                    .append("STDERR:")
+                    .append(System.lineSeparator())
+                    .append(stderr);
+        }
+
+        if (stdout.isBlank() && stderr.isBlank()) {
+            message.append(System.lineSeparator())
+                    .append("No process output was captured.");
+        }
+
+        return message.toString();
+    }
+
+    private String safeText(String value) {
+        return value == null ? "" : value;
+    }
+
     public List<StudentResult> getResults(int projectId) throws SQLException {
         return reportService.getResultsByProject(projectId);
     }

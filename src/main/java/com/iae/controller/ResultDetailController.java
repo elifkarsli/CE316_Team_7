@@ -10,37 +10,30 @@ import javafx.stage.Stage;
 
 public class ResultDetailController {
     @FXML private Label studentLabel;
-    @FXML private TextArea detailArea;
+    @FXML private TextArea compileLogArea;
+    @FXML private TextArea runOutputArea;
+    @FXML private TextArea expectedOutputArea;
+    @FXML private TextArea errorDetailsArea;
 
     public void setResult(StudentResult result) {
+        setResult(result, null);
+    }
+
+    public void setResult(StudentResult result, String expectedOutput) {
         if (result == null) {
             studentLabel.setText("Student:");
-            detailArea.clear();
+            setAreaText(compileLogArea, "");
+            setAreaText(runOutputArea, "");
+            setAreaText(expectedOutputArea, expectedOutput);
+            setAreaText(errorDetailsArea, "");
             return;
         }
 
         studentLabel.setText("Student: " + result.getStudentId());
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("--- COMPILE STATUS: ")
-                .append(valueOrEmpty(result.getCompileStatus()))
-                .append(" ---\n");
-        sb.append(valueOrEmpty(result.getCompileLog())).append('\n');
-        sb.append("--- RUN STATUS: ")
-                .append(valueOrEmpty(result.getRunStatus()))
-                .append(" ---\n");
-        sb.append("Output:\n")
-                .append(valueOrEmpty(result.getRunOutput()));
-        sb.append("\n--- COMPARISON RESULT: ")
-                .append(valueOrEmpty(result.getComparisonResult()))
-                .append(" ---");
-
-        if (result.getErrorDetails() != null && !result.getErrorDetails().isBlank()) {
-            sb.append("\n\n--- DETAILS ---\n")
-                    .append(result.getErrorDetails());
-        }
-
-        detailArea.setText(sb.toString());
+        setAreaText(compileLogArea, result.getCompileLog());
+        setAreaText(runOutputArea, result.getRunOutput());
+        setAreaText(expectedOutputArea, expectedOutput);
+        setAreaText(errorDetailsArea, result.getErrorDetails());
     }
 
     @FXML
@@ -49,7 +42,9 @@ public class ResultDetailController {
         stage.close();
     }
 
-    private String valueOrEmpty(String value) {
-        return value == null ? "" : value;
+    private void setAreaText(TextArea area, String value) {
+        if (area != null) {
+            area.setText(value == null ? "" : value);
+        }
     }
 }

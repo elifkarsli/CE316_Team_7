@@ -1,26 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/17.0.6"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.iae.controller.ResultDetailController"
-      spacing="12"
-      style="-fx-padding:20; -fx-background-color:#F7F9FC;">
+<ScrollPane xmlns="http://javafx.com/javafx/17.0.6"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.iae.controller.ResultDetailController"
+            fitToWidth="true"
+            style="-fx-background-color:#F7F9FC;">
 
-    <Label fx:id="studentLabel"
-           text="Student:"
-           style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
+    <content>
+        <VBox spacing="12" style="-fx-padding:20; -fx-background-color:#F7F9FC;">
+            <Label fx:id="studentLabel"
+                   text="Student:"
+                   style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
 
-    <TextArea fx:id="detailArea"
-              editable="false"
-              wrapText="true"
-              prefRowCount="18"
-              VBox.vgrow="ALWAYS"/>
+            <Label text="Compile Log" style="-fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
+            <TextArea fx:id="compileLogArea"
+                      editable="false"
+                      wrapText="true"
+                      prefRowCount="6"/>
 
-    <HBox alignment="CENTER_RIGHT">
-        <Button text="Close" onAction="#handleClose"/>
-    </HBox>
-</VBox>
+            <Label text="Run Output" style="-fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
+            <TextArea fx:id="runOutputArea"
+                      editable="false"
+                      wrapText="true"
+                      prefRowCount="6"/>
+
+            <Label text="Expected Output" style="-fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
+            <TextArea fx:id="expectedOutputArea"
+                      editable="false"
+                      wrapText="true"
+                      prefRowCount="6"/>
+
+            <Label text="Error Details" style="-fx-font-weight:bold; -fx-text-fill:#1F3864;"/>
+            <TextArea fx:id="errorDetailsArea"
+                      editable="false"
+                      wrapText="true"
+                      prefRowCount="6"/>
+
+            <HBox alignment="CENTER_RIGHT">
+                <Button text="Close" onAction="#handleClose"/>
+            </HBox>
+        </VBox>
+    </content>
+</ScrollPane>
