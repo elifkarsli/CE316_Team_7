@@ -1,21 +1,5 @@
 package com.iae.service;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -26,6 +10,21 @@ import com.google.gson.reflect.TypeToken;
 import com.iae.dao.ConfigurationDAO;
 import com.iae.dao.ProjectDAO;
 import com.iae.model.Configuration;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public class ConfigurationService {
     private static final Type CONFIGURATION_LIST_TYPE = new TypeToken<List<Configuration>>() {
@@ -39,8 +38,7 @@ public class ConfigurationService {
     private final Path projectStorageFile;
     private final Gson gson;
     public ConfigurationService() {
-        this(getAppDataDirectory().resolve("configurations.json"), 
-     getAppDataDirectory().resolve("projects.json"));
+        this(Path.of("data", "configurations.json"), Path.of("data", "projects.json"));
     }
 
     public ConfigurationService(Path storageFile) {
@@ -77,24 +75,7 @@ public class ConfigurationService {
         writeConfigurations(configurations);
         return configuration;
     }
-    private static Path getAppDataDirectory() {
-    String os = System.getProperty("os.name").toLowerCase();
-    Path dataDir;
-    if (os.contains("win")) {
-        dataDir = Paths.get(System.getenv("APPDATA"), "IAE", "data");
-    } else if (os.contains("mac")) {
-        dataDir = Paths.get(System.getProperty("user.home"), 
-            "Library", "Application Support", "IAE", "data");
-    } else {
-        dataDir = Paths.get(System.getProperty("user.home"), ".iae", "data");
-    }
-    try {
-        Files.createDirectories(dataDir);
-    } catch (IOException e) {
-        throw new RuntimeException("Cannot create data directory: " + e.getMessage());
-    }
-    return dataDir;
-}
+
     public Configuration updateConfiguration(Configuration updatedConfiguration) throws IOException {
         validateConfiguration(updatedConfiguration);
 
