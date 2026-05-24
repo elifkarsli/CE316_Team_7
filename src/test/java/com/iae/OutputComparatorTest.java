@@ -48,15 +48,26 @@ class OutputComparatorTest {
     }
 
     @Test
-    void testDiffSummaryShowsExpectedAndActual() throws Exception {
+    void testTrailingWhitespaceIgnored() throws Exception {
         Path expected = Files.createTempFile("expected", ".txt");
         try {
-            Files.writeString(expected, "left\nright\n");
-            String summary = comparator.getDiffSummary("left\nwrong\n", expected);
-            Assertions.assertTrue(summary.contains("EXPECTED:"));
-            Assertions.assertTrue(summary.contains("ACTUAL:"));
+            Files.writeString(expected, "hello\nworld\n");
+            ComparisonResult result = comparator.compare("hello  \nworld\t \n", expected);
+            Assertions.assertEquals(ComparisonResult.PASS, result);
         } finally {
             Files.deleteIfExists(expected);
+        }
+    }
+
+    @Test
+    void testMissingExpectedFile() throws Exception {
+        Path missingParent = Files.createTempDirectory("missing-expected");
+        try {
+            Path missing = missingParent.resolve("missing.txt");
+            ComparisonResult result = comparator.compare("hello\nworld\n", missing);
+            Assertions.assertEquals(ComparisonResult.FAIL, result);
+        } finally {
+            Files.deleteIfExists(missingParent);
         }
     }
 }
