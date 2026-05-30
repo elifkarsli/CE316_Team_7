@@ -572,6 +572,48 @@
     -fx-background-color: #FFCBA4;
 }
 
+.data-table .table-row-cell.pass-row {
+    -fx-background-color: #E4F4E8;
+}
+
+.data-table .table-row-cell.pass-row:odd {
+    -fx-background-color: #D9F0DE;
+}
+
+.data-table .table-row-cell.pass-row:hover {
+    -fx-background-color: #CBEBD2;
+}
+
+.data-table .table-row-cell.pass-row:filled:selected,
+.data-table .table-row-cell.pass-row:filled:selected:hover {
+    -fx-background-color: #BCE4C4;
+}
+
+.data-table .table-row-cell.pass-row:selected {
+    -fx-background-color: #BCE4C4;
+}
+
+.data-table .table-row-cell.fail-row {
+    -fx-background-color: #F8E4DF;
+}
+
+.data-table .table-row-cell.fail-row:odd {
+    -fx-background-color: #F5DBD5;
+}
+
+.data-table .table-row-cell.fail-row:hover {
+    -fx-background-color: #F1CDC6;
+}
+
+.data-table .table-row-cell.fail-row:filled:selected,
+.data-table .table-row-cell.fail-row:filled:selected:hover {
+    -fx-background-color: #EFB8AE;
+}
+
+.data-table .table-row-cell.fail-row:selected {
+    -fx-background-color: #EFB8AE;
+}
+
 .data-table .table-row-cell .table-cell,
 .data-table .table-row-cell .text {
     -fx-background-color: transparent;

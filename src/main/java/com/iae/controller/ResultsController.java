@@ -18,6 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.TableRow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,6 +35,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ResultsController {
+    private static final String PASS_ROW_CLASS = "pass-row";
+    private static final String FAIL_ROW_CLASS = "fail-row";
+
     @FXML private Label projectTitleLabel;
     @FXML private Label lastRunLabel;
     @FXML private Label summaryLabel;
@@ -114,6 +118,24 @@ public class ResultsController {
 
         resultTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             selectedStudentId = newValue == null ? null : newValue.getStudentId();
+        });
+        resultTable.setRowFactory(tableView -> new TableRow<StudentResult>() {
+            @Override
+            protected void updateItem(StudentResult item, boolean empty) {
+                super.updateItem(item, empty);
+
+                getStyleClass().removeAll(PASS_ROW_CLASS, FAIL_ROW_CLASS);
+
+                if (empty || item == null) {
+                    return;
+                }
+
+                if ("PASS".equals(item.getComparisonResult())) {
+                    getStyleClass().add(PASS_ROW_CLASS);
+                } else {
+                    getStyleClass().add(FAIL_ROW_CLASS);
+                }
+            }
         });
         resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         UiTheme.styleDataTable(resultTable);
