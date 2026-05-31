@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 public final class UiTheme {
 
     private static final String STYLESHEET = "/css/iae-theme.css";
-    private static final Color BACKGROUND = Color.web("#08100e");
+    private static final Color BACKGROUND = Color.web("#FFF4E6");
     private static final String TABLE_STYLE = String.join("; ",
             "-fx-base: #0f1513",
             "-fx-control-inner-background: #0f1513",
@@ -59,7 +59,6 @@ public final class UiTheme {
         if (!dialogPane.getStyleClass().contains("iae-dialog-pane")) {
             dialogPane.getStyleClass().add("iae-dialog-pane");
         }
-        dialogPane.setStyle("-fx-background-color: #0f1513;");
         alert.setOnShown(event -> {
             Scene scene = dialogPane.getScene();
             if (scene != null) {
